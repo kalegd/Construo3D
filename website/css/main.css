@@ -39,6 +39,19 @@ a.subnav.display {
     display: block;
 }
 
+.navigation {
+    width: fit-content;
+}
+
+.navigation a {
+    display: block;
+    padding: 5px;
+}
+
+.navigation a:hover {
+    background-color: #dff;
+}
+
 .main {
     margin-left: 100px;
 }
@@ -49,4 +62,34 @@ a.subnav.display {
 
 .page.show {
     display: block;
+}
+
+.processing {
+    display: none;
+}
+
+.processing.show {
+    display: block;
+    color: green;
+}
+
+.error {
+    display: none;
+    color: red;
+}
+
+.error.show {
+    display: block;
+}
+
+img {
+    max-width: 750px;
+    max-height: 750px;
+}
+
+#library-images-list img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-style: double;
 }

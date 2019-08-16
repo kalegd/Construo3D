@@ -1,0 +1,1 @@
+{"websites": [{"name": "My first website", "website_id": 1, "pages": [{"name": "My first page", "assets": [], "skybox": {}, "play_area": {}}, {"name": "My second page", "assets": [], "skybox": {}, "play_area": {}}]}], "library": {"groups": [], "models": [], "lights": [], "images": [], "skyboxes": []}}

@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <title>Construo3D</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="scripts/jquery-3.4.1.min.js" defer></script>
+    <script type="text/javascript" src="scripts/DataStore.js" defer></script>
+    <script type="text/javascript" src="scripts/Websites.js" defer></script>
+    <script type="text/javascript" src="scripts/Website.js" defer></script>
+    <script type="text/javascript" src="scripts/Library.js" defer></script>
+    <script type="text/javascript" src="scripts/LibraryImage.js" defer></script>
+    <script type="text/javascript" src="scripts/LibraryImages.js" defer></script>
+    <script type="text/javascript" src="scripts/LibraryUploadImage.js" defer></script>
+    <script type="text/javascript" src="scripts/Navigation.js" defer></script>
+    <script type="text/javascript" src="scripts/setup.js" defer></script>
+  </head>
+  <body>
+    <div id="sidenav" class="sidenav">
+      <a id="nav-websites" class="active" href="#">Websites</a>
+      <a id="nav-pages" class="hide" href="#">Pages</a>
+      <a id="nav-page-overview" class="subnav pagenav" href="#">Overview</a>
+      <a id="nav-page-assets" class="subnav pagenav" href="#">Assets</a>
+      <a id="nav-page-play-area" class="subnav pagenav" href="#">Play Area</a>
+      <a id="nav-page-skybox" class="subnav pagenav" href="#">Skybox</a>
+      <a id="nav-library" href="#">Library</a>
+      <a id="nav-library-groups" class="subnav librarynav" href="#">Groups</a>
+      <a id="nav-library-models" class="subnav librarynav" href="#">3D Models</a>
+      <a id="nav-library-lights" class="subnav librarynav" href="#">Lights</a>
+      <a id="nav-library-images" class="subnav librarynav" href="#">Images</a>
+      <a id="nav-library-skyboxes" class="subnav librarynav" href="#">Skyboxes</a>
+    </div>
+    <div class="main">
+      <div id="websites" class="page show">
+        <h2>Construo3D</h2>
+        <div id="websites-list" class="navigation">
+        </div>
+      </div>
+      <div id="pages" class="page">
+        <h2>Construo3D</h2>
+        <div id="pages-list" class="navigation">
+        </div>
+      </div>
+      <div id="page-overview" class="page">
+        <h2>Construo3D</h2>
+        <h4>Page Overview</h4>
+      </div>
+      <div id="page-assets" class="page">
+        <h2>Construo3D</h2>
+        <h4>Page Assets</h4>
+      </div>
+      <div id="page-play-area" class="page">
+        <h2>Construo3D</h2>
+        <h4>Page Play Area</h4>
+      </div>
+      <div id="page-skybox" class="page">
+        <h2>Construo3D</h2>
+        <h4>Page Skybox</h4>
+      </div>
+      <div id="library" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Page</h4>
+        <table>
+          <tr>
+            <th>Asset Type</th>
+            <th>Quantity</th>
+          </tr>
+          <tr>
+            <td><input type="button" id="nav-button-groups" value="Groups"></td>
+            <td id="library-groups-length"></td>
+          </tr>
+          <tr>
+            <td><input type="button" id="nav-button-models" value="3D Models"></td>
+            <td id="library-models-length"></td>
+          </tr>
+          <tr>
+            <td><input type="button" id="nav-button-lights" value="Lights"></td>
+            <td id="library-lights-length"></td>
+          </tr>
+          <tr>
+            <td><input type="button" id="nav-button-images" value="Images"></td>
+            <td id="library-images-length"></td>
+          </tr>
+          <tr>
+            <td><input type="button" id="nav-button-skyboxes" value="Skyboxes"></td>
+            <td id="library-skyboxes-length"></td>
+          </tr>
+        </table>
+      </div>
+      <div id="library-groups" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Groups</h4>
+      </div>
+      <div id="library-models" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Models</h4>
+      </div>
+      <div id="library-lights" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Lights</h4>
+      </div>
+      <div id="library-images" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Images</h4>
+        <div id="library-images-list">
+          <a href="#" id="library-upload-image-link">Upload Image</a>
+        </div>
+      </div>
+      <div id="library-image" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Image</h4>
+        <img>
+        <p><label for="library-rename-image-name">Name: </label><input id="library-rename-image-name" type="text" name="name"></p>
+        <div id="library-image-submit-buttons">
+          <input id="library-rename-image-submit" type="button" value="Rename">
+          <input id="library-delete-image-submit" type="button" value="Delete">
+        </div>
+        <div id="library-rename-image-processing" class="processing">File Updating...</div>
+        <div id="library-rename-image-error-name" class="error">Files must have a name</div>
+        <div id="library-rename-image-error-server" class="error">Server error, please try again later</div>
+        <div id="library-delete-image-processing" class="processing">Deleting File...</div>
+        <div id="library-delete-image-error-server" class="error">Server error, please try again later</div>
+      </div>
+      <div id="library-upload-image" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Upload Image</h4>
+        <p>Name: <input id="library-upload-image-name" type="text" name="name"></p>
+        <p><input id="library-upload-image-file" type="file" name="file" accept="image/*"></p>
+        <p><input id="library-upload-image-submit" type="button" value="Upload"></p>
+        <div id="library-upload-image-uploading" class="processing">File Uploading...</div>
+        <div id="library-upload-image-error-name" class="error">Please enter a name for the file</div>
+        <div id="library-upload-image-error-file" class="error">Please select an image file</div>
+        <div id="library-upload-image-error-server" class="error">Server error, please try again later</div>
+      </div>
+      <div id="library-skyboxes" class="page">
+        <h2>Construo3D</h2>
+        <h4>Library Skyboxes</h4>
+      </div>
+    </div>
+  </body>
+</html>
