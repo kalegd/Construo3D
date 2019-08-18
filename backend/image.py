@@ -23,12 +23,16 @@ class Image():
             'filename': filename
         }
         data_store['library']['images'].append(file_record)
-        body = {
-            'image': file_record,
-            'data_store': data_store
-        }
         with open('data_store.json', 'w') as json_file:
             json_file.write(json.dumps(data_store))
+
+        body = {
+            'status': 'success',
+            'data': {
+                'image': file_record,
+            },
+            'message': 'Successfully added image'
+        }
         resp.status = falcon.HTTP_200
         resp.body = json.dumps(body, ensure_ascii=False)
 
@@ -46,6 +50,17 @@ class Image():
         with open('data_store.json', 'w') as json_file:
             json_file.write(json.dumps(data_store))
 
+        body = {
+            'status': 'success',
+            'data': {
+                'image': {
+                    'name': name,
+                    'filename': filename
+                }
+            },
+            'message': 'Successfully deleted image'
+        }
+
         resp.status = falcon.HTTP_200
-        resp.body = json.dumps(data_store, ensure_ascii=False)
+        resp.body = json.dumps(body, ensure_ascii=False)
 

@@ -12,6 +12,15 @@ class DataStore {
         libraryImages.addImage(image);
     }
 
+    renameImage(image) {
+        for (var i = this.library.images.length - 1; i >= 0; --i) {
+            if (this.library.images[i].filename == image.filename) {
+                this.library.images[i].name = image.name;
+                break;
+            }
+        }
+    }
+
     deleteImage(image) {
         for (var i = this.library.images.length - 1; i >= 0; --i) {
             if (this.library.images[i].name == image.name && this.library.images[i].filename == image.filename) {

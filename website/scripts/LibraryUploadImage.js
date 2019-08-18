@@ -30,10 +30,10 @@ class LibraryUploadImage {
             type: 'POST',
             contentType: false, // NEEDED, DON'T OMIT THIS
             processData: false, // NEEDED, DON'T OMIT THIS
-            success: function(data) {
+            success: function(response) {
                 $("#library-upload-image-submit").removeClass("processing");
                 $("#library-upload-image-uploading").removeClass("show");
-                dataStore.addImage(data.image);
+                dataStore.addImage(response.data.image);
                 $("#nav-button-images").click()
             },
             error: function() {
