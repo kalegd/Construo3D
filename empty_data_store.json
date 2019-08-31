@@ -22,7 +22,78 @@
   "library": {
     "groups": [],
     "models": [],
-    "lights": [],
+    "lights": [
+      {
+        "name": "Point Light",
+        "id": "650654cd-27d7-4285-9f2b-29032524d6c8",
+        "file": "library/lights/PointLight.js",
+        "class": "PointLight",
+        "fields": [
+          {
+            "name": "Initial X",
+            "type": "float",
+            "default": 0
+          },
+          {
+            "name": "Initial Y",
+            "type": "float",
+            "default": 0
+          },
+          {
+            "name": "Initial Z",
+            "type": "float",
+            "default": 0
+          },
+          {
+            "name": "Color",
+            "type": "color",
+            "default": "0xffffff"
+          },
+          {
+            "name": "Intensity",
+            "type": "float",
+            "default": 0
+          }
+        ],
+        "versions": [
+          {
+            "id": "dd15de54-792d-47b5-9e2f-ec8230636078",
+            "name": "default",
+            "Initial X": "0",
+            "Initial Y": "0",
+            "Initial Z": "0",
+            "Color": "0xffffff",
+            "Intensity": 1
+          }
+        ]
+      },
+      {
+        "name": "Ambient Light",
+        "id": "c83fd1cf-b2df-48a6-bb47-b7b3cc1e8581",
+        "filename": "library/lights/AmbientLight.js",
+        "class": "AmbientLight",
+        "fields": [
+          {
+            "name": "Color",
+            "type": "color",
+            "default": "#ffffff"
+          },
+          {
+            "name": "Intensity",
+            "type": "float",
+            "default": 1
+          }
+        ],
+        "versions": [
+          {
+            "id": "9b6f7bd4-d254-433a-9686-315a64e5b3a0",
+            "name": "Default",
+            "Color": "#ffffff",
+            "Intensity": 1
+          }
+        ]
+      }
+    ],
     "images": [],
     "skyboxes": []
   }

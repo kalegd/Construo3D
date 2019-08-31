@@ -1,45 +1,46 @@
 class LibraryImage {
     constructor() {
         this._libraryImageDetails = null;
-        this._renameImage = this._renameImage.bind(this);
+        this._editImage = this._editImage.bind(this);
         this._deleteImage = this._deleteImage.bind(this);
         this._setupEventListeners();
     }
 
     _setupEventListeners() {
-        document.getElementById("library-rename-image-submit").addEventListener("click", this._renameImage, false);
+        document.getElementById("library-edit-image-submit").addEventListener("click", this._editImage, false);
         document.getElementById("library-delete-image-submit").addEventListener("click", this._deleteImage, false);
     }
 
-    _renameImage() {
-        $("#library-rename-image-error-name").removeClass("show");
-        $("#library-rename-image-error-server").removeClass("show");
-        if($('#library-rename-image-name').val() == "") {
-            $("#library-rename-image-error-name").addClass("show");
+    _editImage() {
+        $("#library-edit-image-success").removeClass("show");
+        $("#library-edit-image-error-name").removeClass("show");
+        $("#library-edit-image-error-server").removeClass("show");
+        if($('#library-edit-image-name').val() == "") {
+            $("#library-edit-image-error-name").addClass("show");
             return;
         }
         $("#library-image-submit-buttons").addClass("processing");
-        $("#library-rename-image-processing").addClass("show");
+        $("#library-edit-image-processing").addClass("show");
         let request = {
-            'name': $("#library-rename-image-name").val(),
+            'name': $("#library-edit-image-name").val(),
+            'id': this._libraryImageDetails.id,
             'filename': this._libraryImageDetails.filename
         }
         $.ajax({
-            url: 'http://127.0.0.1:5000/image/name',
+            url: 'http://127.0.0.1:5000/library/image/name',
             data: JSON.stringify(request),
             type: 'PUT',
             contentType: 'application/json',
             success: function(response) {
                 $("#library-image-submit-buttons").removeClass("processing");
-                $("#library-rename-image-processing").removeClass("show");
+                $("#library-edit-image-processing").removeClass("show");
                 dataStore.renameImage(response.data.image);
-                $("#nav-button-images").click();
+                $("#library-edit-image-success").addClass("show");
             },
-            //success: this._renameImageCallback,
             error: function() {
                 $("#library-image-submit-buttons").removeClass("processing");
-                $("#library-rename-image-processing").removeClass("show");
-                $("#library-rename-image-error-server").addClass("show");
+                $("#library-edit-image-processing").removeClass("show");
+                $("#library-edit-image-error-server").addClass("show");
             }
         });
     }
@@ -49,7 +50,7 @@ class LibraryImage {
         $("#library-delete-image-error-server").removeClass("show");
         $("#library-delete-image-processing").addClass("show");
         $.ajax({
-            url: 'http://127.0.0.1:5000/image',
+            url: 'http://127.0.0.1:5000/library/image',
             data: JSON.stringify(this._libraryImageDetails),
             type: 'DELETE',
             contentType: 'application/json',
@@ -59,7 +60,6 @@ class LibraryImage {
                 dataStore.deleteImage(response.data.image);
                 $("#nav-button-images").click();
             },
-            //success: this._deleteImageCallback,
             error: function() {
                 $("#library-image-submit-buttons").removeClass("processing");
                 $("#library-delete-image-processing").removeClass("show");
@@ -70,13 +70,14 @@ class LibraryImage {
 
     setImage(image) {
         this._libraryImageDetails = image;
-        $("#library-rename-image-name").val(image.name);
-        $("#library-image img").attr('src', 'library/images/' + image.filename);
+        $("#library-edit-image-name").val(image.name);
+        $("#library-image img").attr('src', image.filename);
 
         $("#library-image-submit-buttons").removeClass("processing");
-        $("#library-rename-image-processing").removeClass("show");
-        $("#library-rename-image-error-name").removeClass("show");
-        $("#library-rename-image-error-server").removeClass("show");
+        $("#library-edit-image-success").removeClass("show");
+        $("#library-edit-image-processing").removeClass("show");
+        $("#library-edit-image-error-name").removeClass("show");
+        $("#library-edit-image-error-server").removeClass("show");
         $("#library-delete-image-processing").removeClass("show");
         $("#library-delete-image-error-server").removeClass("show");
     }

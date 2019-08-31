@@ -7,6 +7,18 @@ class Library {
         $('#library-skyboxes-length').html(library.skyboxes.length);
     }
 
+    updateNumberOfModels(newNumber) {
+        $('#library-models-length').html(newNumber);
+    }
+
+    updateNumberOfImages(newNumber) {
+        $('#library-images-length').html(newNumber);
+    }
+
+    updateNumberOfSkyboxes(newNumber) {
+        $('#library-skyboxes-length').html(newNumber);
+    }
+
 }
 
 var library;

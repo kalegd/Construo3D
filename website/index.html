@@ -2,16 +2,35 @@
   <head>
     <title>Construo3D</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/colorjoe.css">
     <script type="text/javascript" src="scripts/jquery-3.4.1.min.js" defer></script>
-    <script type="text/javascript" src="scripts/DataStore.js" defer></script>
-    <script type="text/javascript" src="scripts/Websites.js" defer></script>
-    <script type="text/javascript" src="scripts/Website.js" defer></script>
-    <script type="text/javascript" src="scripts/Library.js" defer></script>
-    <script type="text/javascript" src="scripts/LibraryImage.js" defer></script>
-    <script type="text/javascript" src="scripts/LibraryImages.js" defer></script>
-    <script type="text/javascript" src="scripts/LibraryUploadImage.js" defer></script>
-    <script type="text/javascript" src="scripts/Navigation.js" defer></script>
-    <script type="text/javascript" src="scripts/setup.js" defer></script>
+    <script type="text/javascript" src="scripts/three.min.js" defer></script>
+    <script type="text/javascript" src="scripts/OrbitControls.js" defer></script>
+    <script type="text/javascript" src="scripts/GLTFLoader.js" defer></script>
+    <script type="text/javascript" src="scripts/colorjoe.min.js" defer></script>
+    <script type="text/javascript" src="scripts/Utilities.js" defer></script>
+    <script type="text/javascript" src="scripts/index/DataStore.js" defer></script>
+    <script type="text/javascript" src="scripts/index/Websites.js" defer></script>
+    <script type="text/javascript" src="scripts/index/Website.js" defer></script>
+    <script type="text/javascript" src="scripts/index/PageOverview.js" defer></script>
+    <script type="text/javascript" src="scripts/index/PageAssets.js" defer></script>
+    <script type="text/javascript" src="scripts/index/PagePlayArea.js" defer></script>
+    <script type="text/javascript" src="scripts/index/Library.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryModel.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryModels.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryModelVersion.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryUploadModel.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryLight.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryLights.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryLightVersion.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibrarySkybox.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibrarySkyboxes.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryUploadSkybox.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryImage.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryImages.js" defer></script>
+    <script type="text/javascript" src="scripts/index/LibraryUploadImage.js" defer></script>
+    <script type="text/javascript" src="scripts/index/Navigation.js" defer></script>
+    <script type="text/javascript" src="scripts/index/setup.js" defer></script>
   </head>
   <body>
     <div id="sidenav" class="sidenav">
@@ -28,35 +47,72 @@
       <a id="nav-library-images" class="subnav librarynav" href="#">Images</a>
       <a id="nav-library-skyboxes" class="subnav librarynav" href="#">Skyboxes</a>
     </div>
+    <div id="topnav" class="topnav">
+      <a id="nav-home" href="#">Construo3D</a>
+      <a id="nav-save" href="#">Save</a>
+      <a id="nav-saving" href="#">Saving...</a>
+    </div>
     <div class="main">
       <div id="websites" class="page show">
-        <h2>Construo3D</h2>
-        <div id="websites-list" class="navigation">
-        </div>
+        <h4>Websites</h4>
+        <div id="websites-list" class="navigation"></div>
+        <input id="create-website-button" type="button" value="Create New Website">
+        <div id="create-website-processing" class="processing">Creating Website...</div>
+        <div id="create-website-error-server" class="error">Server error, please try again later</div>
       </div>
       <div id="pages" class="page">
-        <h2>Construo3D</h2>
-        <div id="pages-list" class="navigation">
+        <h4>Pages</h4>
+        <div id="pages-list" class="navigation"></div>
+        <div id="pages-submit-buttons">
+          <input id="create-page-button" type="button" value="Create New Page">
+          <input id="delete-website-button" type="button" value="Delete Website">
         </div>
+        <div id="create-page-processing" class="processing">Creating Page...</div>
+        <div id="create-page-error-server" class="error">Server error, please try again later</div>
+        <div id="delete-website-processing" class="processing">Deleting Website...</div>
+        <div id="delete-website-error-server" class="error">Server error, please try again later</div>
       </div>
       <div id="page-overview" class="page">
-        <h2>Construo3D</h2>
         <h4>Page Overview</h4>
+        <div>
+          <a id="page-preview-link" href="#">Preview</a>
+        </div>
+        <input id="delete-page-button" type="button" value="Delete Page">
+        <div id="delete-page-processing" class="processing">Deleting Page...</div>
+        <div id="delete-page-error-server" class="error">Server error, please try again later</div>
       </div>
       <div id="page-assets" class="page">
-        <h2>Construo3D</h2>
-        <h4>Page Assets</h4>
+        <div id="page-assets-select">
+          <h4>Page Assets</h4>
+          <div id="page-assets-list" class="assets-list">
+            <a href="#" id="new-page-asset-link">New Asset</a>
+          </div>
+        </div>
+        <div id="page-assets-new">
+          <h4>Add Asset To Page</h4>
+          <div id="page-assets-new-list" class="preview-list">
+          </div>
+        </div>
+        <div id="page-assets-configure">
+          <h4>Configure Asset</h4>
+          <p id="page-assets-name"></p>
+          <div id="page-assets-instance-name"></div>
+          <div id="page-assets-fields"></div>
+          <input id="page-assets-delete-instance" type="button" value="Delete">
+        </div>
       </div>
       <div id="page-play-area" class="page">
-        <h2>Construo3D</h2>
-        <h4>Page Play Area</h4>
+        <div id="page-play-area-main">
+          <h4>Page Play Area</h4>
+          <div id="page-play-area-fields"></div>
+          <input id="page-play-area-select-image" type="button" value="Select Image">
+        </div>
+        <div id="page-play-area-images-list" class="preview-list"></div>
       </div>
       <div id="page-skybox" class="page">
-        <h2>Construo3D</h2>
         <h4>Page Skybox</h4>
       </div>
       <div id="library" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Page</h4>
         <table>
           <tr>
@@ -86,53 +142,232 @@
         </table>
       </div>
       <div id="library-groups" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Groups</h4>
       </div>
       <div id="library-models" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Models</h4>
+        <div id="library-models-list" class="preview-list">
+          <a href="#" id="library-upload-model-link">Upload Model</a>
+        </div>
       </div>
+      <div id="library-model" class="page">
+        <h4>Library Model</h4>
+        <p><label for="library-edit-model-name">Name: </label><input id="library-edit-model-name" type="text" name="name"></p>
+        <div id="library-model-submit-buttons">
+          <input id="library-edit-model-submit" type="button" value="Rename">
+          <input id="library-delete-model-submit" type="button" value="Delete">
+        </div>
+        <div id="library-edit-model-processing" class="processing">Model Updating...</div>
+        <div id="library-edit-model-success" class="success">Model Renamed Successfully</div>
+        <div id="library-edit-model-error-name" class="error">Model must have a name</div>
+        <div id="library-edit-model-error-server" class="error">Server error, please try again later</div>
+        <div id="library-delete-model-processing" class="processing">Deleting Model...</div>
+        <div id="library-delete-model-error-server" class="error">Server error, please try again later</div>
+        <h4>Versions</h4>
+        <div id="library-model-versions-list" class="preview-list">
+          <a href="#" id="library-new-model-version">New Version</a>
+        </div>
+        <div id="library-new-model-version-processing" class="processing">Creating New Model Version...</div>
+        <div id="library-new-model-version-error-server" class="error">Server error, please try again later</div>
+      </div>
+      <div id="library-model-version" class="page">
+        <h4>Library Model Version</h4>
+        <p><label for="library-save-model-version-name">Name: </label><input id="library-save-model-version-name" type="text" name="name"></p>
+        <div id="library-model-version-fields" class="preview-list">
+        </div>
+        <div id="library-model-version-submit-buttons">
+          <input id="library-save-model-version-submit" type="button" value="Save">
+          <input id="library-delete-model-version-submit" type="button" value="Delete">
+        </div>
+        <div id="library-save-model-version-processing" class="processing">Model Version Updating...</div>
+        <div id="library-save-model-version-success" class="success">Model Version Updated Successfully</div>
+        <div id="library-save-model-version-error-name" class="error">Model Version must have a name</div>
+        <div id="library-save-model-version-error-server" class="error">Server error, please try again later</div>
+        <div id="library-delete-model-version-processing" class="processing">Deleting Model Version...</div>
+        <div id="library-delete-model-version-error-server" class="error">Server error, please try again later</div>
+      </div>
+      <div id="library-upload-model" class="page">
+        <h4>Library Upload Model</h4>
+        <p>(Only accepting .glb files right now)</p>
+        <p>
+          <label for="library-upload-model-name">Name: </label>
+          <input id="library-upload-model-name" type="text" name="name">
+        </p>
+        <div id="library-upload-model-preview" class="model-preview">
+        </div>
+        <p><input id="library-upload-model-file" type="file" name="file" accept=".glb"></p>
+        <p><input id="library-upload-model-submit" type="button" value="Upload"></p>
+        <div id="library-upload-model-uploading" class="processing">Model Uploading...</div>
+        <div id="library-upload-model-error-name" class="error">Please enter a name for the Model</div>
+        <div id="library-upload-model-error-file" class="error">Please select a .glb Model</div>
+        <div id="library-upload-model-error-loading" class="error">Error loading this GLB Model, please try a different model</div>
+        <div id="library-upload-model-error-server" class="error">Server error, please try again later</div>
+      </div>
+
+
+
       <div id="library-lights" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Lights</h4>
+        <div id="library-lights-list" class="preview-list">
+        </div>
+      </div>
+      <div id="library-light" class="page">
+        <h4>Library Light</h4>
+        <div id="library-light-versions-list" class="preview-list">
+          <a href="#" id="library-new-light-version">New Version</a>
+        </div>
+        <div id="library-new-light-version-processing" class="processing">Creating New Light Version...</div>
+        <div id="library-new-light-version-error-server" class="error">Server error, please try again later</div>
+      </div>
+      <div id="library-light-version" class="page">
+        <h4>Library Light Version</h4>
+        <p><label for="library-save-light-version-name">Name: </label><input id="library-save-light-version-name" type="text" name="name"></p>
+        <div id="library-light-version-fields" class="preview-list">
+        </div>
+        <div id="library-light-version-submit-buttons">
+          <input id="library-save-light-version-submit" type="button" value="Save">
+          <input id="library-delete-light-version-submit" type="button" value="Delete">
+        </div>
+        <div id="library-save-light-version-processing" class="processing">Light Version Updating...</div>
+        <div id="library-save-light-version-success" class="success">Light Version Updated Successfully</div>
+        <div id="library-save-light-version-error-name" class="error">Light Version must have a name</div>
+        <div id="library-save-light-version-error-server" class="error">Server error, please try again later</div>
+        <div id="library-delete-light-version-processing" class="processing">Deleting Light Version...</div>
+        <div id="library-delete-light-version-error-server" class="error">Server error, please try again later</div>
       </div>
       <div id="library-images" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Images</h4>
-        <div id="library-images-list">
+        <div id="library-images-list" class="preview-list">
           <a href="#" id="library-upload-image-link">Upload Image</a>
         </div>
       </div>
       <div id="library-image" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Image</h4>
+        <p><label for="library-edit-image-name">Name: </label><input id="library-edit-image-name" type="text" name="name"></p>
         <img>
-        <p><label for="library-rename-image-name">Name: </label><input id="library-rename-image-name" type="text" name="name"></p>
         <div id="library-image-submit-buttons">
-          <input id="library-rename-image-submit" type="button" value="Rename">
+          <input id="library-edit-image-submit" type="button" value="Rename">
           <input id="library-delete-image-submit" type="button" value="Delete">
         </div>
-        <div id="library-rename-image-processing" class="processing">File Updating...</div>
-        <div id="library-rename-image-error-name" class="error">Files must have a name</div>
-        <div id="library-rename-image-error-server" class="error">Server error, please try again later</div>
-        <div id="library-delete-image-processing" class="processing">Deleting File...</div>
+        <div id="library-edit-image-processing" class="processing">Image Updating...</div>
+        <div id="library-edit-image-success" class="success">Image Renamed Successfully</div>
+        <div id="library-edit-image-error-name" class="error">Image must have a name</div>
+        <div id="library-edit-image-error-server" class="error">Server error, please try again later</div>
+        <div id="library-delete-image-processing" class="processing">Deleting Image...</div>
         <div id="library-delete-image-error-server" class="error">Server error, please try again later</div>
       </div>
       <div id="library-upload-image" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Upload Image</h4>
-        <p>Name: <input id="library-upload-image-name" type="text" name="name"></p>
+        <p>
+          <label for="library-upload-image-name">Name: </label>
+          <input id="library-upload-image-name" type="text" name="name">
+        </p>
         <p><input id="library-upload-image-file" type="file" name="file" accept="image/*"></p>
         <p><input id="library-upload-image-submit" type="button" value="Upload"></p>
-        <div id="library-upload-image-uploading" class="processing">File Uploading...</div>
-        <div id="library-upload-image-error-name" class="error">Please enter a name for the file</div>
-        <div id="library-upload-image-error-file" class="error">Please select an image file</div>
+        <div id="library-upload-image-uploading" class="processing">Image Uploading...</div>
+        <div id="library-upload-image-error-name" class="error">Please enter a name for the Image</div>
+        <div id="library-upload-image-error-file" class="error">Please select an Image</div>
         <div id="library-upload-image-error-server" class="error">Server error, please try again later</div>
       </div>
       <div id="library-skyboxes" class="page">
-        <h2>Construo3D</h2>
         <h4>Library Skyboxes</h4>
+        <div id="library-skyboxes-list" class="preview-list">
+          <a href="#" id="library-upload-skybox-link">Upload Skybox</a>
+        </div>
+      </div>
+      <div id="library-skybox" class="page">
+        <h4>Library Skybox</h4>
+        <p><label for="library-edit-skybox-name">Name: </label><input id="library-edit-skybox-name" type="text" name="name"></p>
+        <p>
+          <span class="skybox-image-upload-label invisible">&nbsp;</span>
+          <img id="library-edit-skybox-top" class="skybox-image">
+        </p>
+        <p>
+          <img id="library-edit-skybox-left" class="skybox-image">
+          <img id="library-edit-skybox-front" class="skybox-image">
+          <img id="library-edit-skybox-right" class="skybox-image">
+          <img id="library-edit-skybox-back" class="skybox-image">
+        </p>
+        <p>
+          <span class="skybox-image-upload-label invisible">&nbsp;</span>
+          <img id="library-edit-skybox-bottom" class="skybox-image">
+        </p>
+        <p>Preview image:</p>
+        <input type="radio" name="library-edit-skybox-preview" value="top"> Top<br>
+        <input type="radio" name="library-edit-skybox-preview" value="left"> Left<br>
+        <input type="radio" name="library-edit-skybox-preview" value="front"> Front<br>
+        <input type="radio" name="library-edit-skybox-preview" value="right"> Right<br>
+        <input type="radio" name="library-edit-skybox-preview" value="back"> Back<br>
+        <input type="radio" name="library-edit-skybox-preview" value="bottom"> Bottom<br>
+        <p id="library-skybox-submit-buttons">
+          <input id="library-edit-skybox-submit" type="button" value="Save">
+          <input id="library-delete-skybox-submit" type="button" value="Delete">
+        </p>
+        <div id="library-edit-skybox-processing" class="processing">Skybox Updating...</div>
+        <div id="library-edit-skybox-success" class="success">Skybox Updated Successfully</div>
+        <div id="library-edit-skybox-error-name" class="error">Skybox must have a name</div>
+        <div id="library-edit-skybox-error-preview" class="error">Please select a preview image for the Skybox</div>
+        <div id="library-edit-skybox-error-server" class="error">Server error, please try again later</div>
+        <div id="library-delete-skybox-processing" class="processing">Deleting Skybox...</div>
+        <div id="library-delete-skybox-error-server" class="error">Server error, please try again later</div>
+      </div>
+      <div id="library-upload-skybox" class="page">
+        <h4>Library Upload Skybox</h4>
+        <p>
+          <label for="library-upload-skybox-name">Name: </label>
+          <input id="library-upload-skybox-name" type="text" name="name">
+        </p>
+        <p>
+          <span class="skybox-image-upload-label invisible">&nbsp;</span>
+          <label for="library-upload-skybox-top" class="skybox-image-upload-label">
+            <span>Top: </span>
+            <img class="skybox-image-upload-image hidden">
+          </label>
+          <input id="library-upload-skybox-top" class="hidden" type="file" name="file" accept="image/*">
+        </p>
+        <p>
+          <label for="library-upload-skybox-left" class="skybox-image-upload-label">
+            <span>Left: </span>
+            <img class="skybox-image-upload-image hidden">
+          </label>
+          <input id="library-upload-skybox-left" class="hidden" type="file" name="file" accept="image/*">
+          <label for="library-upload-skybox-front" class="skybox-image-upload-label">
+            <span>Front: </span>
+            <img class="skybox-image-upload-image hidden">
+          </label>
+          <input id="library-upload-skybox-front" class="hidden" type="file" name="file" accept="image/*">
+          <label for="library-upload-skybox-right" class="skybox-image-upload-label">
+            <span>Right: </span>
+            <img class="skybox-image-upload-image hidden">
+          </label>
+          <input id="library-upload-skybox-right" class="hidden" type="file" name="file" accept="image/*">
+          <label for="library-upload-skybox-back" class="skybox-image-upload-label">
+            <span>Back: </span>
+            <img class="skybox-image-upload-image hidden">
+          </label>
+          <input id="library-upload-skybox-back" class="hidden" type="file" name="file" accept="image/*">
+        </p>
+        <p>
+          <span class="skybox-image-upload-label invisible">&nbsp;</span>
+          <label for="library-upload-skybox-bottom" class="skybox-image-upload-label">
+            <span>Bottom: </span>
+            <img class="skybox-image-upload-image hidden">
+          </label>
+          <input id="library-upload-skybox-bottom" class="hidden" type="file" name="file" accept="image/*">
+        </p>
+        <p>Please select which image will serve as the preview image:</p>
+        <input type="radio" name="library-upload-skybox-preview" value="top"> Top<br>
+        <input type="radio" name="library-upload-skybox-preview" value="left"> Left<br>
+        <input type="radio" name="library-upload-skybox-preview" value="front"> Front<br>
+        <input type="radio" name="library-upload-skybox-preview" value="right"> Right<br>
+        <input type="radio" name="library-upload-skybox-preview" value="back"> Back<br>
+        <input type="radio" name="library-upload-skybox-preview" value="bottom"> Bottom<br>
+        <p><input id="library-upload-skybox-submit" type="button" value="Upload"></p>
+        <div id="library-upload-skybox-uploading" class="processing">Files Uploading...</div>
+        <div id="library-upload-skybox-error-name" class="error">Please enter a name for the Skybox</div>
+        <div id="library-upload-skybox-error-file" class="error">Please select all 6 images for the Skybox</div>
+        <div id="library-upload-skybox-error-preview" class="error">Please select a preview image for the Skybox</div>
+        <div id="library-upload-skybox-error-server" class="error">Server error, please try again later</div>
       </div>
     </div>
   </body>

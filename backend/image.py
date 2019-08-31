@@ -12,14 +12,16 @@ class Image():
         name = req.get_param('name')
         image = req.get_param('file')
         _, ext = os.path.splitext(image.filename)
-        filename = "{uuid}{ext}".format(uuid=uuid.uuid4(), ext=ext)
-        with open('website/library/images/' + filename, 'wb') as target:
+        image_id = "{uuid}".format(uuid=uuid.uuid4())
+        filename = "library/images/{uuid}{ext}".format(uuid=image_id, ext=ext)
+        with open('website/' + filename, 'wb') as target:
             buf = image.file.read(1048576) # 1 Megabyte
             while buf:
                 target.write(buf)
                 buf = image.file.read(1024)
         file_record = {
             'name': name,
+            'id': image_id,
             'filename': filename
         }
         data_store['library']['images'].append(file_record)
@@ -39,25 +41,20 @@ class Image():
     def on_delete(self, req, resp):
         name = req.media['name']
         filename = req.media['filename']
-        path = "website/library/images/"
+        path = "website/"
         if(os.path.exists(path + filename)):
             os.remove(path + filename);
         data_store = None
         with open('data_store.json') as json_file:
             data_store = json.load(json_file)
 
-        data_store['library']['images'].remove({'name': name, 'filename': filename})
+        data_store['library']['images'].remove(req.media)
         with open('data_store.json', 'w') as json_file:
             json_file.write(json.dumps(data_store))
 
         body = {
             'status': 'success',
-            'data': {
-                'image': {
-                    'name': name,
-                    'filename': filename
-                }
-            },
+            'data': { 'image': req.media },
             'message': 'Successfully deleted image'
         }
 

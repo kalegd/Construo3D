@@ -3,33 +3,30 @@ import json
 import os
 import uuid
 
-class ImageName():
+class ModelName():
 
     def on_put(self, req, resp):
         data_store = None
         with open('data_store.json') as json_file:
             data_store = json.load(json_file)
         name = req.media['name']
-        image_id = req.media['id']
+        model_id = req.media['id']
         filename = req.media['filename']
-        for image_record in data_store['library']['images']:
-            if(image_record['id'] == image_id):
-                image_record['name'] = name
+        model_return_record = None
+        for model_record in data_store['library']['models']:
+            if(model_record['id'] == model_id):
+                model_record['name'] = name
+                model_return_record = model_record
                 break;
         with open('data_store.json', 'w') as json_file:
             json_file.write(json.dumps(data_store))
 
-        image_record = {
-            'name': name,
-            'id': image_id,
-            'filename': filename
-        }
         body = {
             'status': 'success',
             'data': {
-                'image': image_record
+                'model': model_return_record
             },
-            'message': 'Successfully updated image'
+            'message': 'Successfully updated model'
         }
         resp.status = falcon.HTTP_200
         resp.body = json.dumps(body, ensure_ascii=False)

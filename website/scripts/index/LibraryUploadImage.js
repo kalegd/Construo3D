@@ -19,24 +19,27 @@ class LibraryUploadImage {
             $("#library-upload-image-error-file").addClass("show");
             return;
         }
+        $("#library-upload-image-file").addClass("processing");
         $("#library-upload-image-submit").addClass("processing");
         $("#library-upload-image-uploading").addClass("show");
         let formData = new FormData();
         formData.append('name', $('#library-upload-image-name').val());
         formData.append('file', $('#library-upload-image-file')[0].files[0]);
         $.ajax({
-            url: 'http://127.0.0.1:5000/image',
+            url: 'http://127.0.0.1:5000/library/image',
             data: formData,
             type: 'POST',
             contentType: false, // NEEDED, DON'T OMIT THIS
             processData: false, // NEEDED, DON'T OMIT THIS
             success: function(response) {
+                $("#library-upload-image-file").removeClass("processing");
                 $("#library-upload-image-submit").removeClass("processing");
                 $("#library-upload-image-uploading").removeClass("show");
                 dataStore.addImage(response.data.image);
                 $("#nav-button-images").click()
             },
             error: function() {
+                $("#library-upload-image-file").removeClass("processing");
                 $("#library-upload-image-submit").removeClass("processing");
                 $("#library-upload-image-uploading").removeClass("show");
                 $("#library-upload-image-error-server").addClass("show");
@@ -45,6 +48,7 @@ class LibraryUploadImage {
     }
 
     clear() {
+        $("#library-upload-image-file").removeClass("processing");
         $("#library-upload-image-submit").removeClass("processing");
         $("#library-upload-image-uploading").removeClass("show");
         $("#library-upload-image-error-name").removeClass("show");

@@ -2,18 +2,23 @@ class Navigation {
     constructor() {
         this._navbarChange = this._navbarChange.bind(this);
         this._navButtonClicked = this._navButtonClicked.bind(this);
+        this._addModelToLibrary = this._addModelToLibrary.bind(this);
         this._addImageToLibrary = this._addImageToLibrary.bind(this);
+        this._addSkyboxToLibrary = this._addSkyboxToLibrary.bind(this);
         this._setupEventListeners();
     }
 
     _setupEventListeners() {
         document.getElementById("sidenav").addEventListener("click", this._navbarChange, false);
+        document.getElementById("nav-home").addEventListener("click", this._navbarChange, false);
         document.getElementById("nav-button-groups").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("nav-button-models").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("nav-button-lights").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("nav-button-images").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("nav-button-skyboxes").addEventListener("click", this._navButtonClicked, false);
+        document.getElementById("library-upload-model-link").addEventListener("click", this._addModelToLibrary, false);
         document.getElementById("library-upload-image-link").addEventListener("click", this._addImageToLibrary, false);
+        document.getElementById("library-upload-skybox-link").addEventListener("click", this._addSkyboxToLibrary, false);
     }
 
     _navButtonClicked(e) {
@@ -24,7 +29,14 @@ class Navigation {
 
     _navbarChange(e) {
         let id = e.target.id;
-        if(id == "nav-websites") {
+        if(id == "nav-home") {
+            $(".subnav.display").removeClass("display");
+            this._setActiveNavAndShownPage(id);
+            $("#websites").addClass("show");
+            $("#nav-websites").addClass("active");
+            $("#nav-websites").removeClass("hide");
+            $("#nav-pages").addClass("hide");
+        } else if (id == "nav-websites") {
             $(".subnav.display").removeClass("display");
             this._setActiveNavAndShownPage(id);
         } else if (id == "nav-pages") {
@@ -68,6 +80,36 @@ class Navigation {
         $("#" + navId.substring(navId.indexOf("-") + 1)).addClass("show");
     }
 
+    _addModelToLibrary() {
+        $(".page.show").removeClass("show");
+        $("#library-upload-model").addClass("show");
+        libraryUploadModel.clear();
+    }
+
+    goToLibraryModel(model) {
+        $(".page.show").removeClass("show");
+        $("#library-model").addClass("show");
+        libraryModel.setModel(model);
+    }
+
+    goToLibraryModelVersion(version) {
+        $(".page.show").removeClass("show");
+        $("#library-model-version").addClass("show");
+        libraryModelVersion.setVersion(version);
+    }
+
+    goToLibraryLight(light) {
+        $(".page.show").removeClass("show");
+        $("#library-light").addClass("show");
+        libraryLight.setLight(light);
+    }
+
+    goToLibraryLightVersion(version) {
+        $(".page.show").removeClass("show");
+        $("#library-light-version").addClass("show");
+        libraryLightVersion.setVersion(version);
+    }
+
     _addImageToLibrary() {
         $(".page.show").removeClass("show");
         $("#library-upload-image").addClass("show");
@@ -80,6 +122,18 @@ class Navigation {
         libraryImage.setImage(image);
     }
 
+    _addSkyboxToLibrary() {
+        $(".page.show").removeClass("show");
+        $("#library-upload-skybox").addClass("show");
+        libraryUploadSkybox.clear();
+    }
+
+    goToLibrarySkybox(skybox) {
+        $(".page.show").removeClass("show");
+        $("#library-skybox").addClass("show");
+        librarySkybox.setSkybox(skybox);
+    }
+
     goToWebsite(websiteDetails) {
         $("#nav-websites").removeClass("active");
         $("#nav-websites").addClass("hide");
@@ -90,12 +144,15 @@ class Navigation {
         website.selectWebsite(websiteDetails);
     }
 
-    goToPage(website) {
+    goToPage(page) {
         $("#nav-pages").removeClass("active");
         $(".subnav.pagenav").addClass("display");
         $("#nav-page-overview").addClass("active");
         $(".page.show").removeClass("show");
         $("#page-overview").addClass("show");
+        pageOverview.setPage(page);
+        pageAssets.setAssets(page.assets);
+        pagePlayArea.setPlayArea(page.play_area);
     }
 
 }
