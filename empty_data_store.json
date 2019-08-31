@@ -1,24 +1,5 @@
 {
-  "websites": [
-    {
-      "name": "My first website",
-      "website_id": 1,
-      "pages": [
-        {
-          "name": "My first page",
-          "assets": [],
-          "skybox": {},
-          "play_area": {}
-        },
-        {
-          "name": "My second page",
-          "assets": [],
-          "skybox": {},
-          "play_area": {}
-        }
-      ]
-    }
-  ],
+  "websites": [],
   "library": {
     "groups": [],
     "models": [],
@@ -26,7 +7,8 @@
       {
         "name": "Point Light",
         "id": "650654cd-27d7-4285-9f2b-29032524d6c8",
-        "file": "library/lights/PointLight.js",
+        "type": "JS",
+        "filename": "library/lights/PointLight.js",
         "class": "PointLight",
         "fields": [
           {
@@ -47,29 +29,30 @@
           {
             "name": "Color",
             "type": "color",
-            "default": "0xffffff"
+            "default": "#ffffff"
           },
           {
             "name": "Intensity",
             "type": "float",
+            "default": 1
+          },
+          {
+            "name": "Distance",
+            "type": "float",
             "default": 0
+          },
+          {
+            "name": "Decay",
+            "type": "float",
+            "default": 1
           }
         ],
-        "versions": [
-          {
-            "id": "dd15de54-792d-47b5-9e2f-ec8230636078",
-            "name": "default",
-            "Initial X": "0",
-            "Initial Y": "0",
-            "Initial Z": "0",
-            "Color": "0xffffff",
-            "Intensity": 1
-          }
-        ]
+        "versions": []
       },
       {
         "name": "Ambient Light",
         "id": "c83fd1cf-b2df-48a6-bb47-b7b3cc1e8581",
+        "type": "JS",
         "filename": "library/lights/AmbientLight.js",
         "class": "AmbientLight",
         "fields": [
@@ -86,9 +69,9 @@
         ],
         "versions": [
           {
-            "id": "9b6f7bd4-d254-433a-9686-315a64e5b3a0",
-            "name": "Default",
-            "Color": "#ffffff",
+            "id": "461c11e0-244b-4ab8-a420-eaed709cc4a0",
+            "name": "Green",
+            "Color": "#28ca37",
             "Intensity": 1
           }
         ]
