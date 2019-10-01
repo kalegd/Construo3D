@@ -104,6 +104,9 @@ class LibraryModel {
     }
 
     _deleteModel() {
+        if(!confirm("Deleting this model will delete any references to it in all of your Websites. Press Ok to confirm delete")) {
+            return;
+        }
         $("#library-model-submit-buttons").addClass("processing");
         $("#library-delete-model-error-server").removeClass("show");
         $("#library-delete-model-processing").addClass("show");
@@ -135,6 +138,9 @@ class LibraryModel {
             let a = LibraryModel._createModelVersionHTMLElement(versions[i]);
             $("#library-new-model-version").before(a);
         }
+        $("#library-edit-model-success").removeClass("show");
+        $("#library-edit-model-error-name").removeClass("show");
+        $("#library-edit-model-error-server").removeClass("show");
     }
 
 }

@@ -4,11 +4,20 @@ class Preview {
         this._height;
         this._renderer;
         this._scene;
+        this._user;
         this._camera;
         this._assets = [];
+        this._dynamicAssets = [];
+        this._terrainAssets = [];
 
         this._container = document.querySelector('#container');;
         this._startMessage = document.querySelector('#start');
+
+        //Temp stuff
+        //this._mixer;
+        //this._clips;
+        //this._clip;
+        //this._action;
 
         //Camera Variables
         this._aspect;
@@ -24,22 +33,23 @@ class Preview {
         this._moveLeft = false;
         this._moveRight = false;
         this._invertedPitch = true;
+        this._movementSpeed = 2.5;
 
         this._playAreaWidth = dataStore.getPlayAreaWidth();
         this._playAreaLength = dataStore.getPlayAreaLength();
-        this._skyboxLength = dataStore.getSkyboxLength();
 
-        this.clearContainer();
-        this.createRenderer();
+        this._clearContainer();
+        this._createRenderer();
 
         this._onResize = this._onResize.bind(this);
         this._update = this._update.bind(this);
         this._onResize();
 
         this.createScene();
-        this.createCamera();
+        this.createUser();
         this.createAssets();
 
+        this._setUserSettings();
         this.addAssetsToScene();
         this.addEventListeners();
         this._enableKeyboardMouse();
@@ -47,15 +57,24 @@ class Preview {
         this._renderer.setAnimationLoop(this._update);
     }
 
-    clearContainer() {
+    _setUserSettings() {
+        let userSettings = dataStore.getUserSettings();
+        this._user.position.x = userSettings['Initial X Position'];
+        this._user.position.y = userSettings['Initial Y Position'];
+        this._user.position.z = userSettings['Initial Z Position'];
+        this._camera.position.y = userSettings['Camera Height'];
+        this._movementSpeed = userSettings['Movement Speed'];
+        this._invertedPitch = userSettings['Invert Camera Y Axis Controls'];
+    }
+
+    _clearContainer() {
         this._container.innerHTML = '';
     }
 
-    createRenderer() {
+    _createRenderer() {
         this._renderer = new THREE.WebGLRenderer({ antialias : true });
         this._container.appendChild(this._renderer.domElement);
         if('xr' in navigator || 'getVRDisplays' in navigator) {
-            console.log("HI");
             this._renderer.vr.enabled = true;
             this._container.appendChild(THREE.WEBVR.createButton(this._renderer));
         }
@@ -65,19 +84,27 @@ class Preview {
         this._scene = new THREE.Scene();
     }
 
-    createCamera() {
+    createUser() {
+        this._user = new THREE.Object3D();
         this._camera = new THREE.PerspectiveCamera(
             this._fieldOfViewAngle,
             this._aspect,
             this._near,
             this._far
         );
+        this._user.add(this._camera);
     }
 
     createAssets() {
         let playArea = dataStore.getPlayArea();
         if(playArea['Floor Enabled']) {
             let asset = new Floor(playArea);
+            this._assets.push(asset);
+            this._terrainAssets.push(asset.getObject());
+        }
+        let skybox = dataStore.getSkybox();
+        if(skybox['Skybox Enabled']) {
+            let asset = new Skybox(skybox);
             this._assets.push(asset);
         }
         let pageAssets = dataStore.getPageAssets();
@@ -93,6 +120,9 @@ class Preview {
                     let C = eval(dataStore.assets[assetId]['class']);
                     let asset = new C(instances[i]);
                     this._assets.push(asset);
+                    if(asset.canUpdate()) {
+                        this._dynamicAssets.push(asset);
+                    }
                 }
             }
         }
@@ -131,11 +161,11 @@ class Preview {
             return;
         }
         this._controls = new THREE.PointerLockControls(
+            this._user,
             this._camera,
             this._invertedPitch
         );
-        this._scene.add(this._controls.getObject());
-        this._controls.getObject().position.y = 1.7;
+        this._scene.add(this._user);
         document.addEventListener('pointerlockchange', _ =>
             { this._pointerLockChanged() }, false );
         document.addEventListener('mozpointerlockchange', _ =>
@@ -210,7 +240,13 @@ class Preview {
 
         if (this._controls && this._controls.enabled) {
             this._updatePosition(timeDelta);
+            for(let i = 0; i < this._dynamicAssets.length; i++) {
+                this._dynamicAssets[i].update(timeDelta);
+            }
         }
+        //if(this._mixer != null) {
+        //    this._mixer.update(timeDelta);
+        //}
         // Draw!
         this._renderer.render(this._scene, this._camera);
     }
@@ -220,14 +256,12 @@ class Preview {
         this._velocity.x -= this._velocity.x * 10.0 * timeDelta;
         this._velocity.z -= this._velocity.z * 10.0 * timeDelta;
 
-        let controls_yaw = this._controls.getObject();
-
-        let movingDistance = 100.0 * timeDelta;
+        let movingDistance = 10.0 * this._movementSpeed * timeDelta;
         if (this._moveForward) {
-            this._velocity.z -= movingDistance;
+            this._velocity.z += movingDistance;
         }
         if (this._moveBackward) {
-            this._velocity.z += movingDistance;
+            this._velocity.z -= movingDistance;
         }
         if (this._moveLeft) {
             this._velocity.x -= movingDistance;
@@ -236,19 +270,27 @@ class Preview {
             this._velocity.x += movingDistance;
         }
 
-        controls_yaw.translateX(this._velocity.x * timeDelta);
-        controls_yaw.translateZ(this._velocity.z * timeDelta);
+        if(this._velocity.length() > this._movementSpeed) {
+            this._velocity.normalize().multiplyScalar(this._movementSpeed);
+        }
+        this._controls.moveRight(this._velocity.x * timeDelta);
+        this._controls.moveForward(this._velocity.z * timeDelta);
 
-        // Check bounds so we don't walk through the walls.
-        if (controls_yaw.position.z > this._playAreaLength / 2)
-          controls_yaw.position.z = this._playAreaLength / 2;
-        if (controls_yaw.position.z < -1 * this._playAreaLength / 2)
-          controls_yaw.position.z = -1 * this._playAreaLength / 2;
+        // Check bounds so we don't walk through the boundary
+        if (this._user.position.z > this._playAreaLength / 2)
+          this._user.position.z = this._playAreaLength / 2;
+        if (this._user.position.z < -1 * this._playAreaLength / 2)
+          this._user.position.z = -1 * this._playAreaLength / 2;
 
-        if (controls_yaw.position.x > this._playAreaWidth / 2)
-          controls_yaw.position.x = this._playAreaWidth / 2;
-        if (controls_yaw.position.x < -1 * this._playAreaWidth / 2)
-          controls_yaw.position.x = -1 * this._playAreaWidth / 2;
+        if (this._user.position.x > this._playAreaWidth / 2)
+          this._user.position.x = this._playAreaWidth / 2;
+        if (this._user.position.x < -1 * this._playAreaWidth / 2)
+          this._user.position.x = -1 * this._playAreaWidth / 2;
+
+        let intersection = getTerrainIntersection(this._user, this._terrainAssets);
+        if(intersection != null) {
+            this._user.position.y = intersection.point.y;
+        }
     }
 
 }

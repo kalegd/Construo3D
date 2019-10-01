@@ -6,6 +6,7 @@
     <script type="text/javascript" src="scripts/jquery-3.4.1.min.js" defer></script>
     <script type="text/javascript" src="scripts/three.min.js" defer></script>
     <script type="text/javascript" src="scripts/OrbitControls.js" defer></script>
+    <script type="text/javascript" src="scripts/SkeletonUtils.js" defer></script>
     <script type="text/javascript" src="scripts/GLTFLoader.js" defer></script>
     <script type="text/javascript" src="scripts/colorjoe.min.js" defer></script>
     <script type="text/javascript" src="scripts/Utilities.js" defer></script>
@@ -15,6 +16,8 @@
     <script type="text/javascript" src="scripts/index/PageOverview.js" defer></script>
     <script type="text/javascript" src="scripts/index/PageAssets.js" defer></script>
     <script type="text/javascript" src="scripts/index/PagePlayArea.js" defer></script>
+    <script type="text/javascript" src="scripts/index/PageSkybox.js" defer></script>
+    <script type="text/javascript" src="scripts/index/PageUserSettings.js" defer></script>
     <script type="text/javascript" src="scripts/index/Library.js" defer></script>
     <script type="text/javascript" src="scripts/index/LibraryModel.js" defer></script>
     <script type="text/javascript" src="scripts/index/LibraryModels.js" defer></script>
@@ -40,6 +43,7 @@
       <a id="nav-page-assets" class="subnav pagenav" href="#">Assets</a>
       <a id="nav-page-play-area" class="subnav pagenav" href="#">Play Area</a>
       <a id="nav-page-skybox" class="subnav pagenav" href="#">Skybox</a>
+      <a id="nav-page-user-settings" class="subnav pagenav" href="#">User Settings</a>
       <a id="nav-library" href="#">Library</a>
       <a id="nav-library-groups" class="subnav librarynav" href="#">Groups</a>
       <a id="nav-library-models" class="subnav librarynav" href="#">3D Models</a>
@@ -55,6 +59,7 @@
     <div class="main">
       <div id="websites" class="page show">
         <h4>Websites</h4>
+        <!--<a href="http://192.168.1.12:8100/preview.html?website-id=b5e9acb1-b05d-430b-988e-68b6c394feb0&page-id=a1c3c252-596e-408b-8356-906c68eb3aca">Temp Link</a>-->
         <div id="websites-list" class="navigation"></div>
         <input id="create-website-button" type="button" value="Create New Website">
         <div id="create-website-processing" class="processing">Creating Website...</div>
@@ -75,7 +80,7 @@
       <div id="page-overview" class="page">
         <h4>Page Overview</h4>
         <div>
-          <a id="page-preview-link" href="#">Preview</a>
+          <a id="page-preview-link" href="#" target="_blank">Preview</a>
         </div>
         <input id="delete-page-button" type="button" value="Delete Page">
         <div id="delete-page-processing" class="processing">Deleting Page...</div>
@@ -105,12 +110,24 @@
         <div id="page-play-area-main">
           <h4>Page Play Area</h4>
           <div id="page-play-area-fields"></div>
-          <input id="page-play-area-select-image" type="button" value="Select Image">
+          <div id="page-play-area-floor-fields"></div>
         </div>
         <div id="page-play-area-images-list" class="preview-list"></div>
       </div>
       <div id="page-skybox" class="page">
-        <h4>Page Skybox</h4>
+        <div id="page-skybox-main">
+          <h4>Page Skybox</h4>
+          <div id="page-skybox-fields"></div>
+          <div id="page-skybox-skybox-fields"></div>
+          <input id="page-skybox-select-skybox" type="button" value="Select Skybox">
+        </div>
+        <div id="page-skybox-skyboxes-list" class="preview-list"></div>
+      </div>
+      <div id="page-user-settings" class="page">
+        <div id="page-user-settings-main">
+          <h4>Page User Settings</h4>
+          <div id="page-user-settings-fields"></div>
+        </div>
       </div>
       <div id="library" class="page">
         <h4>Library Page</h4>
@@ -195,7 +212,7 @@
         </p>
         <div id="library-upload-model-preview" class="model-preview">
         </div>
-        <p><input id="library-upload-model-file" type="file" name="file" accept=".glb"></p>
+        <p><input id="library-upload-model-file" type="file" name="file" accept=".glb,.js"></p>
         <p><input id="library-upload-model-submit" type="button" value="Upload"></p>
         <div id="library-upload-model-uploading" class="processing">Model Uploading...</div>
         <div id="library-upload-model-error-name" class="error">Please enter a name for the Model</div>

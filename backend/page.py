@@ -11,7 +11,6 @@ class Page():
         with open('data_store.json') as json_file:
             data_store = json.load(json_file)
         page_id = "{uuid}".format(uuid=uuid.uuid4())
-        #TODO: Create html document to preview the page
         page_record = None
         for website_record in data_store['websites']:
             if(website_record['id'] == website_id):
@@ -23,10 +22,29 @@ class Page():
                         "Width": 100,
                         "Length": 100,
                         "Floor Enabled": False,
-                        "image_id": None,
-                        "Color": "#40e0d0"
+                        "Use Image": False,
+                        "Image": None,
+                        "Image Width": 100,
+                        "Image Length": 100,
+                        "Color": "#40e0d0",
+                        "Use Height Map": False,
+                        "Height Map": None,
+                        "Minimum Height": 0,
+                        "Maximum Height": 100
                     },
-                    'skybox': {}
+                    'skybox': {
+                        "Skybox Enabled": False,
+                        "skybox_id": None,
+                        "Length": 10000
+                    },
+                    'user_settings': {
+                        "Initial X Position": 0,
+                        "Initial Y Position": 0,
+                        "Initial Z Position": 0,
+                        "Camera Height": 1.7,
+                        "Movement Speed": 2.5,
+                        "Invert Camera Y Axis Controls": True
+                    }
                 }
                 website_record['pages'].append(page_record)
                 break;

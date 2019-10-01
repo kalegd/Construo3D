@@ -50,6 +50,9 @@ class LibrarySkybox {
     }
 
     _deleteSkybox() {
+        if(!confirm("Deleting this skybox will delete any references to it in all of your Websites. Press Ok to confirm delete")) {
+            return;
+        }
         $("#library-skybox-submit-buttons").addClass("processing");
         $("#library-delete-skybox-error-server").removeClass("show");
         $("#library-delete-skybox-processing").addClass("show");

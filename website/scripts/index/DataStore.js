@@ -24,8 +24,16 @@ class DataStore {
         }
     }
 
-    getFields(assetId) {
+    getAssetFields(assetId) {
         return this.assets[assetId].fields;
+    }
+
+    getAssetName(assetId) {
+        return this.assets[assetId].name;
+    }
+
+    getImageName(imageId) {
+        return this.images[imageId].name;
     }
 
     signalWebsiteUpdate() {
@@ -43,6 +51,9 @@ class DataStore {
                 break;
             }
         }
+        pageAssets._pageAssets = null;
+        pagePlayArea._playArea = null;
+        pageSkybox._skybox = null;
     }
 
     deletePage(websiteId, pageId) {
@@ -57,6 +68,9 @@ class DataStore {
                 break;
             }
         }
+        pageAssets._pageAssets = null;
+        pagePlayArea._playArea = null;
+        pageSkybox._skybox = null;
     }
 
     // Model Section
@@ -66,6 +80,7 @@ class DataStore {
         this.assets[model.id] = model;
         libraryModels.addModel(model);
         library.updateNumberOfModels(this.library.models.length);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     renameModel(model) {
@@ -76,6 +91,7 @@ class DataStore {
             }
         }
         libraryModels.renameModel(model);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     deleteModel(model) {
@@ -86,8 +102,16 @@ class DataStore {
             }
         }
         delete this.assets[model.id];
+        for(let i = 0; i < this.websites.length; i++) {
+            for(let j = 0; j < this.websites[i].pages.length; j++) {
+                delete this.websites[i].pages[j].assets[model.id];
+            }
+        }
+        replaceAllInObject(this.library, model.id, null);
+        replaceAllInObject(this.websites, model.id, null);
         libraryModels.deleteModel(model);
         library.updateNumberOfModels(this.library.models.length);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     addModelVersion(modelId, modelVersion) {
@@ -98,6 +122,7 @@ class DataStore {
                 break;
             }
         }
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     updateModelVersion(modelId, modelVersion) {
@@ -116,6 +141,7 @@ class DataStore {
             }
         }
         libraryModel.updateVersion(modelVersion);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     deleteModelVersion(modelId, modelVersion) {
@@ -132,6 +158,7 @@ class DataStore {
         }
 
         libraryModel.deleteVersion(modelVersion);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     // Light Section
@@ -144,6 +171,7 @@ class DataStore {
                 break;
             }
         }
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     updateLightVersion(lightId, lightVersion) {
@@ -162,6 +190,7 @@ class DataStore {
             }
         }
         libraryLight.updateVersion(lightVersion);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     deleteLightVersion(lightId, lightVersion) {
@@ -178,6 +207,7 @@ class DataStore {
         }
 
         libraryLight.deleteVersion(lightVersion);
+        pageAssets.setAssets(pageAssets._pageAssets);
     }
 
     // Image Section
@@ -187,6 +217,10 @@ class DataStore {
         this.images[image.id] = image;
         libraryImages.addImage(image);
         library.updateNumberOfImages(this.library.images.length);
+        let divs = $(".editable-images-list");
+        for(let i = 0; i < divs.length; i++) {
+            divs[i].addImage(image);
+        }
     }
 
     renameImage(image) {
@@ -196,6 +230,7 @@ class DataStore {
                 break;
             }
         }
+        pagePlayArea.setPlayArea(pagePlayArea._playArea);
     }
 
     deleteImage(image) {
@@ -206,9 +241,14 @@ class DataStore {
             }
         }
         delete this.images[image.id];
+        replaceAllInObject(this.library, image.id, null);
+        replaceAllInObject(this.websites, image.id, null);
         libraryImages.deleteImage(image);
         library.updateNumberOfImages(this.library.images.length);
+        pageAssets.setAssets(pageAssets._pageAssets);
+        pagePlayArea.setPlayArea(pagePlayArea._playArea);
     }
+ 
 
     //Skybox Section
 
@@ -217,6 +257,7 @@ class DataStore {
         this.skyboxes[skybox.id] = skybox;
         librarySkyboxes.addSkybox(skybox);
         library.updateNumberOfSkyboxes(this.library.skyboxes.length);
+        pageSkybox.setSkyboxList();
     }
 
     updateSkybox(skybox) {
@@ -228,6 +269,7 @@ class DataStore {
             }
         }
         librarySkyboxes.updateSkybox(skybox);
+        pageSkybox.setSkybox(pageSkybox._skybox);
     }
 
     deleteSkybox(skybox) {
@@ -238,8 +280,16 @@ class DataStore {
             }
         }
         delete this.skyboxes[skybox.id];
+        for(let i = 0; i < this.websites.length; i++) {
+            for(let j = 0; j < this.websites[i].pages.length; j++) {
+                if(this.websites[i].pages[j].skybox.skybox_id == skybox.id) {
+                    this.websites[i].pages[j].skybox.skybox_id = null;
+                }
+            }
+        }
         librarySkyboxes.deleteSkybox(skybox);
         library.updateNumberOfSkyboxes(this.library.skyboxes.length);
+        pageSkybox.setSkybox(pageSkybox._skybox);
     }
 
 }

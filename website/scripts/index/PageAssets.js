@@ -84,7 +84,7 @@ class PageAssets {
     _selectInstance(assetId, instance) {
         $("#page-assets").removeClass("active-new");
         $("#page-assets").addClass("active-configure");
-        let fields = dataStore.getFields(assetId);
+        let fields = dataStore.getAssetFields(assetId);
         let fieldsDiv = document.getElementById("page-assets-fields");
         fieldsDiv.innerHTML = "";
         document.getElementById("page-assets-name").innerHTML = dataStore.assets[assetId].name;
@@ -92,7 +92,7 @@ class PageAssets {
         instanceName.innerHTML = "";
         let nameInput = createInputOfType("text", instance['name'], 'name', instance);
         instanceName.append(nameInput);
-        let nameText = nameInput.children[0].firstChild
+        let nameText = nameInput.children[0].firstChild;
         nameText.nodeValue = nameText.nodeValue.substring(0,1).toUpperCase() + nameText.nodeValue.substring(1);
         for(let i = 0; i < fields.length; i++) {
             let field = fields[i];
@@ -138,7 +138,24 @@ class PageAssets {
             $("#new-page-asset-link").before(elements.div);
         }
 
-        //Set list of new assets
+        this.setAssetList();
+    }
+
+    _createDefaultAnchor(assetId) {
+        let a = document.createElement("a");
+        let text = document.createTextNode("Default");
+        a.href = "#";
+        a.append(text);
+        let version = { "name": "Default" };
+        let fields = dataStore.assets[assetId].fields;
+        for(let i = 0; i < fields.length; i++) {
+            version[fields[i].name] = fields[i]['default'];
+        }
+        a.addEventListener("click", this._addNewAsset.bind(this, assetId, version), false);
+        return a;
+    }
+
+    setAssetList() {
         document.getElementById("page-assets-new-list").innerHTML = "";
         for(let assetId in dataStore.assets) {
             let asset = dataStore.assets[assetId];
@@ -162,20 +179,6 @@ class PageAssets {
             $("#page-assets-new-list").append(a);
             $("#page-assets-new-list").append(div);
         }
-    }
-
-    _createDefaultAnchor(assetId) {
-        let a = document.createElement("a");
-        let text = document.createTextNode("Default");
-        a.href = "#";
-        a.append(text);
-        let version = { "name": "Default" };
-        let fields = dataStore.assets[assetId].fields;
-        for(let i = 0; i < fields.length; i++) {
-            version[fields[i].name] = fields[i]['default'];
-        }
-        a.addEventListener("click", this._addNewAsset.bind(this, assetId, version), false);
-        return a;
     }
 
 }

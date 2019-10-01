@@ -137,7 +137,7 @@ img {
     max-height: 750px;
 }
 
-.preview-list > img, img.skybox-image {
+.preview-list > img, img.skybox-image, .editable-images-list img {
     width: 150px;
     height: 150px;
     object-fit: contain;
@@ -148,7 +148,7 @@ img {
     display: block;
 }
 
-.assets-list > a {
+.assets-list > a, .editable-assets-list > a {
     display: block;
 }
 
@@ -165,23 +165,23 @@ img {
     display: block;
 }
 
-#page-assets > div, #page-play-area > div {
+#page-assets > div, #page-play-area > div, #page-skybox > div {
     display: inline-table;
 }
 
-#page-assets > #page-assets-select, #page-play-area > #page-play-area-main {
+#page-assets > #page-assets-select, #page-play-area > #page-play-area-main, , #page-skybox > #page-skybox-main {
     width: 100%;
 }
 
-#page-assets > #page-assets-new, #page-assets > #page-assets-configure, #page-play-area > #page-play-area-images-list {
+#page-assets > #page-assets-new, #page-assets > #page-assets-configure, #page-play-area > #page-play-area-images-list, #page-skybox > #page-skybox-skyboxes-list {
     display: none;
 }
 
-#page-assets.active-new > #page-assets-select, #page-assets.active-configure > #page-assets-select, #page-play-area.active-image-select > #page-play-area-main {
+#page-assets.active-new > #page-assets-select, #page-assets.active-configure > #page-assets-select, #page-play-area.active-image-select > #page-play-area-main, #page-skybox.active-skybox-select > #page-skybox-main {
     width: 49%;
 }
 
-#page-assets.active-new > #page-assets-new, #page-assets.active-configure > #page-assets-configure, #page-play-area.active-image-select > #page-play-area-images-list {
+#page-assets.active-new > #page-assets-new, #page-assets.active-configure > #page-assets-configure, #page-play-area.active-image-select > #page-play-area-images-list, #page-skybox.active-skybox-select > #page-skybox-skyboxes-list {
     display: inline-table;
     border-left-style: solid;
     height: 100%;

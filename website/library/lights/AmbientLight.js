@@ -24,4 +24,8 @@ class AmbientLight {
         fullDispose(this._pivotPoint);
     }
 
+    canUpdate() {
+        return false;
+    }
+
 }

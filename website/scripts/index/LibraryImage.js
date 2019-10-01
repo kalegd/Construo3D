@@ -46,6 +46,9 @@ class LibraryImage {
     }
 
     _deleteImage() {
+        if(!confirm("Deleting this image will delete any references to it in all of your Websites. Press Ok to confirm delete")) {
+            return;
+        }
         $("#library-image-submit-buttons").addClass("processing");
         $("#library-delete-image-error-server").removeClass("show");
         $("#library-delete-image-processing").addClass("show");

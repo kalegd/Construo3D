@@ -3,18 +3,14 @@ class PointLight {
         this._light;
         this._pivotPoint = new THREE.Object3D();
 
-        this._pivotPoint.translateX(instance['Initial X']);
-        this._pivotPoint.translateY(instance['Initial Y']);
-        this._pivotPoint.translateZ(instance['Initial Z']);
+        this._pivotPoint.translateX(instance['Initial X Position']);
+        this._pivotPoint.translateY(instance['Initial Y Position']);
+        this._pivotPoint.translateZ(instance['Initial Z Position']);
 
         this._createMeshes(instance);
     }
 
     _createMeshes(instance) {
-        console.log(colorHexToHex(instance['Color']));
-        console.log(instance['Intensity']);
-        console.log(instance['Distance']);
-        console.log(instance['Decay']);
         this._light = new THREE.PointLight(
             colorHexToHex(instance['Color']),
             instance['Intensity'],
@@ -32,6 +28,10 @@ class PointLight {
     removeFromScene() {
         this._pivotPoint.parent.remove(this._pivotPoint);
         fullDispose(this._pivotPoint);
+    }
+
+    canUpdate() {
+        return false;
     }
 
 }

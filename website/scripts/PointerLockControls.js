@@ -3,27 +3,30 @@
  * @author Mugen87 / https://github.com/Mugen87
  */
 
-THREE.PointerLockControls = function ( camera, invertVerticalControls, domElement ) {
-
-	var scope = this;
+THREE.PointerLockControls = function ( user, camera, invertVerticalControls, domElement ) {
 
 	this.domElement = domElement || document.body;
+	this.isLocked = false;
     this.invertValue = 1;
     if(invertVerticalControls == true) {
         this.invertValue = -1;
     }
-	this.isLocked = false;
 
-	camera.rotation.set( 0, 0, 0 );
+	//
+	// internals
+	//
 
-	var pitchObject = new THREE.Object3D();
-	pitchObject.add( camera );
+	var scope = this;
 
-	var yawObject = new THREE.Object3D();
-	yawObject.position.y = 10;
-	yawObject.add( pitchObject );
+	var changeEvent = { type: 'change' };
+	var lockEvent = { type: 'lock' };
+	var unlockEvent = { type: 'unlock' };
+
+	var euler = new THREE.Euler( 0, 0, 0, 'YXZ' );
 
 	var PI_2 = Math.PI / 2;
+
+	var vec = new THREE.Vector3();
 
 	function onMouseMove( event ) {
 
@@ -32,10 +35,16 @@ THREE.PointerLockControls = function ( camera, invertVerticalControls, domElemen
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		yawObject.rotation.y -= movementX * 0.002;
-		pitchObject.rotation.x -= movementY * 0.002 * scope.invertValue;
+		euler.setFromQuaternion( camera.quaternion );
 
-		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
+		euler.y -= movementX * 0.002;
+		euler.x -= movementY * 0.002 * scope.invertValue;
+
+		euler.x = Math.max( - PI_2, Math.min( PI_2, euler.x ) );
+
+		camera.quaternion.setFromEuler( euler );
+
+		scope.dispatchEvent( changeEvent );
 
 	}
 
@@ -43,13 +52,13 @@ THREE.PointerLockControls = function ( camera, invertVerticalControls, domElemen
 
 		if ( document.pointerLockElement === scope.domElement ) {
 
-			scope.dispatchEvent( { type: 'lock' } );
+			scope.dispatchEvent( lockEvent );
 
 			scope.isLocked = true;
 
 		} else {
 
-			scope.dispatchEvent( { type: 'unlock' } );
+			scope.dispatchEvent( unlockEvent );
 
 			scope.isLocked = false;
 
@@ -85,30 +94,44 @@ THREE.PointerLockControls = function ( camera, invertVerticalControls, domElemen
 
 	};
 
-	this.getObject = function () {
+	this.getObject = function () { // retaining this method for backward compatibility
 
-		return yawObject;
+		return camera;
 
 	};
 
 	this.getDirection = function () {
 
-		// assumes the camera itself is not rotated
-
 		var direction = new THREE.Vector3( 0, 0, - 1 );
-		var rotation = new THREE.Euler( 0, 0, 0, 'YXZ' );
 
 		return function ( v ) {
 
-			rotation.set( pitchObject.rotation.x, yawObject.rotation.y, 0 );
-
-			v.copy( direction ).applyEuler( rotation );
-
-			return v;
+			return v.copy( direction ).applyQuaternion( camera.quaternion );
 
 		};
 
 	}();
+
+	this.moveForward = function ( distance ) {
+
+		// move forward parallel to the xz-plane
+		// assumes camera.up is y-up
+
+		vec.setFromMatrixColumn( camera.matrix, 0 );
+
+		vec.crossVectors( camera.up, vec );
+
+		user.position.addScaledVector( vec, distance );
+
+	};
+
+	this.moveRight = function ( distance ) {
+
+		vec.setFromMatrixColumn( camera.matrix, 0 );
+
+		user.position.addScaledVector( vec, distance );
+
+	};
 
 	this.lock = function () {
 

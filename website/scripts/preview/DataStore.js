@@ -40,17 +40,20 @@ class DataStore {
         return this.page.play_area['Length'];
     }
 
-    //TODO
-    getSkyboxLength() {
-        return 10000;
-    }
-
     getPlayArea() {
         return this.page.play_area;
     }
 
+    getSkybox() {
+        return this.page.skybox;
+    }
+
     getPageAssets() {
         return this.page.assets;
+    }
+
+    getUserSettings() {
+        return this.page.user_settings;
     }
 
 }

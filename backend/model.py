@@ -12,6 +12,50 @@ class Model():
         name = req.get_param('name')
         model = req.get_param('file')
         _, ext = os.path.splitext(model.filename)
+        if(ext == ".js"):
+            fields = json.loads(req.get_param("fields"))
+            model_type = "JS"
+            model_class = req.get_param("class")
+        else:
+            fields = [
+                {   
+                    "name": "Scale",
+                    "type": "float",
+                    "default": 1
+                },
+                {   
+                    "name": "Initial X Position",
+                    "type": "float",
+                    "default": 0
+                },
+                {   
+                    "name": "Initial Y Position",
+                    "type": "float",
+                    "default": 0
+                },
+                {   
+                    "name": "Initial Z Position",
+                    "type": "float",
+                    "default": 0
+                },
+                {
+                    "name": "Initial X Rotation",
+                    "type": "degrees",
+                    "default": 0
+                },
+                {
+                    "name": "Initial Y Rotation",
+                    "type": "degrees",
+                    "default": 0
+                },
+                {
+                    "name": "Initial Z Rotation",
+                    "type": "degrees",
+                    "default": 0
+                }
+            ]
+            model_type = "GLB"
+            model_class = "GLTFAsset"
         model_id = "{uuid}".format(uuid=uuid.uuid4())
         filename = "library/models/{uuid}{ext}".format(uuid=model_id, ext=ext)
         with open('website/' + filename, 'wb') as target:
@@ -22,46 +66,10 @@ class Model():
         file_record = {
             'name': name,
             'id': model_id,
-            'type': 'GLB',
+            'type': model_type,
             'filename': filename,
-            'class': 'GLTFAsset',
-            'fields': [
-                {
-                    "name": "Scale",
-                    "type": "float",
-                    "default": 1
-                },
-                {
-                    "name": "Initial X",
-                    "type": "float",
-                    "default": 0
-                },
-                {
-                    "name": "Initial Y",
-                    "type": "float",
-                    "default": 0
-                },
-                {
-                    "name": "Initial Z",
-                    "type": "float",
-                    "default": 0
-                },
-                {
-                    "name": "Initial Rotation X",
-                    "type": "degrees",
-                    "default": 0
-                },
-                {
-                    "name": "Initial Rotation Y",
-                    "type": "degrees",
-                    "default": 0
-                },
-                {
-                    "name": "Initial Rotation Z",
-                    "type": "degrees",
-                    "default": 0
-                }
-            ],
+            'class': model_class,
+            'fields': fields,
             "versions": []
         }
         data_store['library']['models'].append(file_record)
@@ -79,7 +87,7 @@ class Model():
         resp.body = json.dumps(body, ensure_ascii=False)
 
     def on_delete(self, req, resp):
-        name = req.media['name']
+        model_id = req.media['id']
         filename = req.media['filename']
         path = "website/"
         if(os.path.exists(path + filename)):
@@ -89,8 +97,15 @@ class Model():
             data_store = json.load(json_file)
 
         data_store['library']['models'].remove(req.media)
+        # Delete references in websites 
+        for website in data_store['websites']:
+            for page in website['pages']:
+                if(model_id in page['assets']):
+                    page['assets'].pop(model_id)
+        # Replace any occurance of the asset as a parameter with null
+        json_string = json.dumps(data_store).replace("\"" + model_id + "\"", "null")
         with open('data_store.json', 'w') as json_file:
-            json_file.write(json.dumps(data_store))
+            json_file.write(json_string)
 
         body = {
             'status': 'success',

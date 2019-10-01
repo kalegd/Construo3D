@@ -57,6 +57,9 @@ class Navigation {
         } else if (id == "nav-page-skybox") {
             //$(".subnav.librarynav.display").removeClass("display");
             this._setActiveNavAndShownPage(id);
+        } else if (id == "nav-page-user-settings") {
+            //$(".subnav.librarynav.display").removeClass("display");
+            this._setActiveNavAndShownPage(id);
         } else if (id == "nav-library") {
             $(".subnav.librarynav").addClass("display");
             this._setActiveNavAndShownPage(id);
@@ -153,6 +156,8 @@ class Navigation {
         pageOverview.setPage(page);
         pageAssets.setAssets(page.assets);
         pagePlayArea.setPlayArea(page.play_area);
+        pageSkybox.setSkybox(page.skybox);
+        pageUserSettings.setUserSettings(page.user_settings);
     }
 
 }

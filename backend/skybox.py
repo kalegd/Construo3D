@@ -86,7 +86,6 @@ class Skybox():
         resp.body = json.dumps(body, ensure_ascii=False)
 
     def on_delete(self, req, resp):
-        name = req.media['name']
         skybox_id = req.media['id']
         filenames = [req.media['front'], req.media['back'], req.media['left'], req.media['right'], req.media['top'], req.media['bottom']]
         path = "website/"
@@ -100,6 +99,11 @@ class Skybox():
             data_store = json.load(json_file)
 
         data_store['library']['skyboxes'].remove(req.media)
+        #delete references in websites
+        for website in data_store['websites']:
+            for page in website['pages']:
+                if(skybox_id == page['skybox']['skybox_id']):
+                    page['skybox']['skybox_id'] = None
         with open('data_store.json', 'w') as json_file:
             json_file.write(json.dumps(data_store))
 

@@ -8,13 +8,21 @@ function createInputOfType(dataType, initialValue, name, instance) {
     } else if(dataType == "float") {
         return _createFloatInput(initialValue, name, instance);
     } else if(dataType == "integer") {
-
+        return _createIntegerInput(initialValue, name, instance);
     } else if(dataType == "degrees") {
         return _createDegreesInput(initialValue, name, instance);
     } else if(dataType == "text") {
         return _createTextInput(initialValue, name, instance);
     } else if(dataType == "boolean") {
         return _createCheckboxInput(initialValue, name, instance);
+    } else if(dataType == "asset") {
+        return _createAssetInput(initialValue, name, instance);
+    } else if(dataType == "glb") {
+        return _createGLBInput(initialValue, name, instance);
+    } else if(dataType == "js") {
+        return _createJSInput(initialValue, name, instance);
+    } else if(dataType == "image") {
+        return _createImageInput(initialValue, name, instance);
     }
     let input = document.createElement("input");
     input.value = dataType + " - " + initialValue;
@@ -71,6 +79,34 @@ function _createFloatInput(initialValue, name, instance) {
         validValue = isNaN(parseFloat(div.getValue()))
             ? div.lastValidValue
             : parseFloat(div.getValue());
+        if(instance) {
+            instance[name] = validValue;
+            if(validValue != div.lastValidValue) {
+                dataStore.signalWebsiteUpdate();
+            }
+        }
+        input.value = validValue;
+        div.lastValidValue = validValue;
+    });
+    return div;
+}
+
+function _createIntegerInput(initialValue, name, instance) {
+    let div = document.createElement("div");
+    let input = document.createElement("input");
+    let label = document.createElement("label");
+    let text = document.createTextNode(name + ": ");
+    input.value = initialValue;
+    label.append(text);
+    label.append(input);
+    div.append(label);
+    div.lastValidValue = initialValue;
+    div.getValue = function() { return parseInt(input.value); };
+    div.getName = function() { return name; };
+    $(input).on("blur", function () {
+        validValue = isNaN(parseInt(div.getValue()))
+            ? div.lastValidValue
+            : parseInt(div.getValue());
         if(instance) {
             instance[name] = validValue;
             if(validValue != div.lastValidValue) {
@@ -167,6 +203,330 @@ function _createCheckboxInput(initialValue, name, instance) {
     return div;
 }
 
+function _createAssetInput(initialValue, name, instance) {
+    let div = document.createElement("div");
+    let input = document.createElement("input");
+    let span = document.createElement("span");
+    let b = document.createElement("b");
+    let text = document.createTextNode(name + ": ");
+    let bText;
+    if(!initialValue) {
+        bText = document.createTextNode("None Selected\xa0\xa0");
+    } else {
+        bText = document.createTextNode(dataStore.getAssetName(initialValue) + "\xa0\xa0");
+    }
+    b.append(bText);
+    span.append(text);
+    span.append(b);
+    input.type = "button";
+    input.val = initialValue;
+    input.value = "Select Asset";
+    div.append(span);
+    div.append(input);
+    div.lastValidValue = initialValue;
+    div.getValue = function() { return input.val; };
+    div.getName = function() { return name; };
+    $(input).on("click", function () {
+        dialog.showModal();
+    });
+    let dialog = _createAssetDialog(instance, name, div, input, b);
+    div.append(dialog);
+    return div;
+}
+function _createAssetDialog(instance, name, div, input, b) {
+    let dialog = document.createElement("dialog");
+    let dialogDiv = document.createElement("div");
+    let h1 = document.createElement("h1");
+    h1.append(document.createTextNode("Select Asset"));
+    dialogDiv.append(h1);
+    $(dialogDiv).addClass("editable-assets-list");
+    dialogDiv.append(h1);
+    dialog.append(dialogDiv);
+    for(let assetId in dataStore.assets) {
+        let asset = dataStore.assets[assetId];
+        let a = document.createElement("a");
+        let text = document.createTextNode(asset.name);
+        a.href = "#";
+        a.append(text);
+        a.addEventListener("click", function() {
+            if(instance) {
+                instance[name] = assetId;
+                if(assetId != div.lastValidValue) {
+                    dataStore.signalWebsiteUpdate();
+                }
+            }
+            input.val = assetId;
+            div.lastValidValue = assetId;
+            b.innerHTML = asset.name + "\xa0\xa0";
+            dialog.close();
+        }, false);
+        dialogDiv.append(a);
+    }
+
+    dialog.addEventListener('click', function (event) {
+        var rect = dialog.getBoundingClientRect();
+        var isInDialog=(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+          && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+        if (!isInDialog) {
+            dialog.close();
+        }
+    });
+    return dialog;
+}
+
+function _createGLBInput(initialValue, name, instance) {
+    let div = document.createElement("div");
+    let input = document.createElement("input");
+    let span = document.createElement("span");
+    let b = document.createElement("b");
+    let text = document.createTextNode(name + ": ");
+    let bText;
+    if(!initialValue) {
+        bText = document.createTextNode("None Selected\xa0\xa0");
+    } else {
+        bText = document.createTextNode(dataStore.getAssetName(initialValue) + "\xa0\xa0");
+    }
+    b.append(bText);
+    span.append(text);
+    span.append(b);
+    input.type = "button";
+    input.val = initialValue;
+    input.value = "Select Asset";
+    div.append(span);
+    div.append(input);
+    div.lastValidValue = initialValue;
+    div.getValue = function() { return input.val; };
+    div.getName = function() { return name; };
+    $(input).on("click", function () {
+        dialog.showModal();
+    });
+    let dialog = _createGLBDialog(instance, name, div, input, b);
+    div.append(dialog);
+    return div;
+}
+function _createGLBDialog(instance, name, div, input, b) {
+    let dialog = document.createElement("dialog");
+    let dialogDiv = document.createElement("div");
+    let h1 = document.createElement("h1");
+    h1.append(document.createTextNode("Select Asset"));
+    dialogDiv.append(h1);
+    $(dialogDiv).addClass("editable-assets-list");
+    dialogDiv.append(h1);
+    dialog.append(dialogDiv);
+    for(let assetId in dataStore.assets) {
+        let asset = dataStore.assets[assetId];
+        if(asset.type != "GLB") {
+            continue;
+        }
+        let a = document.createElement("a");
+        let text = document.createTextNode(asset.name);
+        a.href = "#";
+        a.append(text);
+        a.addEventListener("click", function() {
+            if(instance) {
+                instance[name] = assetId;
+                if(assetId != div.lastValidValue) {
+                    dataStore.signalWebsiteUpdate();
+                }
+            }
+            input.val = assetId;
+            div.lastValidValue = assetId;
+            b.innerHTML = asset.name + "\xa0\xa0";
+            dialog.close();
+        }, false);
+        dialogDiv.append(a);
+    }
+
+    dialog.addEventListener('click', function (event) {
+        var rect = dialog.getBoundingClientRect();
+        var isInDialog=(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+          && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+        if (!isInDialog) {
+            dialog.close();
+        }
+    });
+    return dialog;
+}
+
+function _createJSInput(initialValue, name, instance) {
+    let div = document.createElement("div");
+    let input = document.createElement("input");
+    let span = document.createElement("span");
+    let b = document.createElement("b");
+    let text = document.createTextNode(name + ": ");
+    let bText;
+    if(!initialValue) {
+        bText = document.createTextNode("None Selected\xa0\xa0");
+    } else {
+        bText = document.createTextNode(dataStore.getAssetName(initialValue) + "\xa0\xa0");
+    }
+    b.append(bText);
+    span.append(text);
+    span.append(b);
+    input.type = "button";
+    input.val = initialValue;
+    input.value = "Select Asset";
+    div.append(span);
+    div.append(input);
+    div.lastValidValue = initialValue;
+    div.getValue = function() { return input.val; };
+    div.getName = function() { return name; };
+    $(input).on("click", function () {
+        dialog.showModal();
+    });
+    let dialog = _createJSDialog(instance, name, div, input, b);
+    div.append(dialog);
+    return div;
+}
+function _createJSDialog(instance, name, div, input, b) {
+    let dialog = document.createElement("dialog");
+    let dialogDiv = document.createElement("div");
+    let h1 = document.createElement("h1");
+    h1.append(document.createTextNode("Select Asset"));
+    dialogDiv.append(h1);
+    $(dialogDiv).addClass("editable-assets-list");
+    dialogDiv.append(h1);
+    dialog.append(dialogDiv);
+    for(let assetId in dataStore.assets) {
+        let asset = dataStore.assets[assetId];
+        if(asset.type != "JS") {
+            continue;
+        }
+        let a = document.createElement("a");
+        let text = document.createTextNode(asset.name);
+        a.href = "#";
+        a.append(text);
+        a.addEventListener("click", function() {
+            if(instance) {
+                instance[name] = assetId;
+                if(assetId != div.lastValidValue) {
+                    dataStore.signalWebsiteUpdate();
+                }
+            }
+            input.val = assetId;
+            div.lastValidValue = assetId;
+            b.innerHTML = asset.name + "\xa0\xa0";
+            dialog.close();
+        }, false);
+        dialogDiv.append(a);
+    }
+
+    dialog.addEventListener('click', function (event) {
+        var rect = dialog.getBoundingClientRect();
+        var isInDialog=(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+          && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+        if (!isInDialog) {
+            dialog.close();
+        }
+    });
+    return dialog;
+}
+
+function _createImageInput(initialValue, name, instance) {
+    let div = document.createElement("div");
+    let input = document.createElement("input");
+    let span = document.createElement("span");
+    let b = document.createElement("b");
+    let text = document.createTextNode(name + ": ");
+    let bText;
+    if(!initialValue) {
+        bText = document.createTextNode("None Selected\xa0\xa0");
+    } else {
+        bText = document.createTextNode(dataStore.getImageName(initialValue) + "\xa0\xa0");
+    }
+    b.append(bText);
+    span.append(text);
+    span.append(b);
+    input.type = "button";
+    input.val = initialValue;
+    input.value = "Select Image";
+    div.append(span);
+    div.append(input);
+    div.lastValidValue = initialValue;
+    div.getValue = function() { return input.val; };
+    div.getName = function() { return name; };
+    div.setNull = function() {
+        if(instance) {
+            instance[name] = null;
+            if(null != div.lastValidValue) {
+                dataStore.signalWebsiteUpdate();
+            }
+        }
+        input.val = null;
+        div.lastValidValue = null;
+        b.innerHTML = "None Selected\xa0\xa0";
+    };
+    $(input).on("click", function () {
+        dialog.showModal();
+    });
+    let dialog = _createImageDialog(instance, name, div, input, b);
+    div.append(dialog);
+    return div;
+}
+
+function _createImageDialog(instance, name, div, input, b) {
+    let dialog = document.createElement("dialog");
+    let dialogDiv = document.createElement("div");
+    let h1 = document.createElement("h1");
+    h1.append(document.createTextNode("Select Image"));
+    dialogDiv.append(h1);
+    $(dialogDiv).addClass("editable-images-list");
+    dialogDiv.append(h1);
+    dialog.append(dialogDiv);
+    for(let imageId in dataStore.images) {
+        let image = dataStore.images[imageId];
+        let a = document.createElement("a");
+        let img = new Image();
+        img.src = image.filename;
+        a.href = "#";
+        a.append(img);
+        a.addEventListener("click", function() {
+            if(instance) {
+                instance[name] = imageId;
+                if(imageId != div.lastValidValue) {
+                    dataStore.signalWebsiteUpdate();
+                }
+            }
+            input.val = imageId;
+            div.lastValidValue = imageId;
+            b.innerHTML = image.name + "\xa0\xa0";
+            dialog.close();
+        }, false);
+        dialogDiv.append(a);
+    }
+
+    dialogDiv.addImage = function(image) {
+        let a = document.createElement("a");
+        let img = new Image();
+        img.src = image.filename;
+        a.href = "#";
+        a.append(img);
+        a.addEventListener("click", function() {
+            if(instance) {
+                instance[name] = image.id;
+                if(image.id != div.lastValidValue) {
+                    dataStore.signalWebsiteUpdate();
+                }
+            }
+            input.val = image.id;
+            div.lastValidValue = image.id;
+            b.innerHTML = image.name + "\xa0\xa0";
+            dialog.close();
+        }, false);
+        dialogDiv.append(a);
+    }
+    //Exits Dialog Box when click occurs outside of it
+    dialog.addEventListener('click', function (event) {
+        var rect = dialog.getBoundingClientRect();
+        var isInDialog=(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+          && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+        if (!isInDialog) {
+            dialog.close();
+        }
+    });
+    return dialog;
+}
+
 function saveWebsiteChanges() {
     $("#nav-save").removeClass("unsaved-changes");
     $("#nav-saving").addClass("saving");
@@ -186,8 +546,27 @@ function saveWebsiteChanges() {
     });
 }
 
+function replaceAllInObject(object, oldValue, newValue) {
+    for(let property in object) {
+        let value = object[property];
+        if(typeof value === "object") {
+            replaceAllInObject(value, oldValue, newValue);
+        } else if(value == oldValue) {
+            object[property] = newValue;
+        }
+    }
+}
+
 function colorHexToHex(colorHex) {
     return parseInt(colorHex.replace("#", "0x"), 16);
+}
+
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+function getRandomFloat(min, max) {
+    return (Math.random() * (max - min) ) + min;
 }
 
 //https://stackoverflow.com/questions/1866717/document-createelementscript-adding-two-scripts-with-one-callback/1867135#1867135
@@ -209,6 +588,50 @@ function loadScripts(array,callback){
             callback && callback();
         }
     })();
+}
+
+function getHeightData(img,scale) {
+     if (scale == undefined) {
+         scale=1;
+     }
+
+    var canvas = document.createElement( 'canvas' );
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var context = canvas.getContext( '2d' );
+
+    var size = img.width * img.height;
+    var data = new Float32Array( size );
+
+    context.drawImage(img,0,0);
+
+    for ( var i = 0; i < size; i ++ ) {
+        data[i] = 0
+    }
+
+    var imgd = context.getImageData(0, 0, img.width, img.height);
+    var pix = imgd.data;
+
+    var j=0;
+    for (var i = 0; i<pix.length; i +=4) {
+        var all = pix[i]+pix[i+1]+pix[i+2];
+        data[j++] = all/(12*scale);
+    }
+
+    return data;
+}
+
+function getTerrainIntersection(object, terrain) {
+    let origin = object.position.clone();
+    origin.y += 1;//Think about getting rid of this and the cloning
+    let direction = new THREE.Vector3(0, -1, 0);
+    let raycaster = new THREE.Raycaster(origin, direction);
+    let intersections = raycaster.intersectObjects(terrain, true);
+    if(intersections.length == 0) {
+        return null;
+    } else {
+        return intersections[0];
+    }
 }
 
 //function rgbToColorHex(x) { return '#' + x.match(/\d+/g).map(y = z => ((+z < 16)?'0':'') + (+z).toString(16)).join(''); };
