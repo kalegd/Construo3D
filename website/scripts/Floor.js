@@ -44,6 +44,7 @@ class Floor {
                     texture.wrapT = THREE.RepeatWrapping;
                     texture.repeat.set( scope._instance['Width'] / scope._instance['Image Width'] , scope._instance['Length'] / scope._instance['Image Length'] );
                     let material = new THREE.MeshBasicMaterial( { map: texture } );
+                    //let material = new THREE.MeshBasicMaterial( { map: texture, opacity: 0.5, transparent: true } );
                     scope._floor = new THREE.Mesh( geometry, material );
                     if(heightMapImg) {
                         scope._applyHeightMap(heightMapImg);

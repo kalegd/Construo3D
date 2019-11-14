@@ -34,4 +34,8 @@ class PointLight {
         return false;
     }
 
+    static getScriptType() {
+        return ScriptType.ASSET;
+    }
+
 }

@@ -13,19 +13,11 @@ function getDependencies() {
         dependencies.push(dataStore.scripts[scriptId].filename);
     }
     loadScripts(dependencies, function() {
-        preview = new Preview();
+        release = new Release();
     });
 }
 
-var urlParams = new URLSearchParams(window.location.search);
-if(urlParams.has("website-id") && urlParams.has("page-id")) {
-    $.getJSON('http://127.0.0.1:5000/data-store', function(response) {
-    //$.getJSON('http://192.168.1.3:5000/data-store', function(response) {
-        dataStore = new DataStore(
-            response.data.data_store,
-            urlParams.get("website-id"),
-            urlParams.get("page-id")
-        );
-        getDependencies();
-    });
-}
+$.getJSON('./page_info.json', function(response) {
+    dataStore = new DataStore(response);
+    getDependencies();
+});

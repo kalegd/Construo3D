@@ -117,9 +117,9 @@ THREE.PointerLockControls = function ( user, camera, invertVerticalControls, dom
 		// move forward parallel to the xz-plane
 		// assumes camera.up is y-up
 
-		vec.setFromMatrixColumn( camera.matrix, 0 );
+		vec.setFromMatrixColumn( camera.matrixWorld, 0 );
 
-		vec.crossVectors( camera.up, vec );
+		vec.crossVectors( user.up, vec );
 
 		user.position.addScaledVector( vec, distance );
 
@@ -127,11 +127,19 @@ THREE.PointerLockControls = function ( user, camera, invertVerticalControls, dom
 
 	this.moveRight = function ( distance ) {
 
-		vec.setFromMatrixColumn( camera.matrix, 0 );
+		vec.setFromMatrixColumn( camera.matrixWorld, 0 );
+
+        vec.y = 0;
+
+        vec.normalize();
 
 		user.position.addScaledVector( vec, distance );
 
 	};
+
+    this.rotateOnY = function ( radians ) {
+        user.rotateOnWorldAxis(user.up, radians);
+    }
 
 	this.lock = function () {
 

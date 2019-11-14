@@ -40,6 +40,7 @@ class PageOverview {
     setPage(page) {
         this._page = page;
         document.getElementById("page-preview-link").href = "/preview.html?website-id=" + website._website.id + "&page-id=" + this._page.id;
+        document.getElementById("page-export-link").href = "http://127.0.0.1:5000/export?website-id=" + website._website.id + "&page-id=" + this._page.id;
     }
 }
 

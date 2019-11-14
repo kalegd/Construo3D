@@ -1,21 +1,9 @@
 class DataStore {
-    constructor(data, websiteId, pageId) {
-        this.page = null;
-        for(let i = 0; i < data.websites.length; i++) {
-            if(data.websites[i].id == websiteId) {
-                for(let j = 0; j < data.websites[i].pages.length; j++) {
-                    if(data.websites[i].pages[j].id == pageId) {
-                        this.page = data.websites[i].pages[j];
-                        break;
-                    }
-                }
-                break;
-            }
-        }
+    constructor(data) {
+        this.page = data.page;
         if(this.page == null) {
             return;
         }
-        this.websites = data.websites;
         this.library = data.library;
         this.assets = {};
         this.skyboxes = {};

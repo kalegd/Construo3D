@@ -634,6 +634,33 @@ function getTerrainIntersection(object, terrain) {
     }
 }
 
+function getLocalTerrainIntersection(object, terrain) {
+    let origin = object.position.clone();
+    let up = object.up.clone();
+    up.applyQuaternion(object.quaternion);
+    let down = up.clone().negate();
+    origin.add(up.clone().normalize().setLength(0.2));
+    let raycaster = new THREE.Raycaster(origin, down, 0, 0.3);
+    let intersections = raycaster.intersectObjects(terrain, true);
+    if(intersections.length == 0) {
+        return null;
+    } else {
+        return intersections[0];
+    }
+}
+
+function vectorProjectionOnPlane(direction, planeNormal) {
+    let direction2 = direction.clone();
+    direction2.normalize();
+    let planeNormal2 = planeNormal.clone();
+    planeNormal2.normalize();
+    let projection = planeNormal2.clone();
+    projection.cross(direction2);
+    projection.cross(planeNormal2);
+    //projection.multiplyScalar(direction.length());
+    return projection;
+}
+
 //function rgbToColorHex(x) { return '#' + x.match(/\d+/g).map(y = z => ((+z < 16)?'0':'') + (+z).toString(16)).join(''); };
 
 /*Make resizable div by Hung Nguyen*/

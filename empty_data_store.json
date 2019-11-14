@@ -12,17 +12,17 @@
         "class": "PointLight",
         "fields": [
           {
-            "name": "Initial X",
+            "name": "Initial X Position",
             "type": "float",
             "default": 0
           },
           {
-            "name": "Initial Y",
+            "name": "Initial Y Position",
             "type": "float",
             "default": 0
           },
           {
-            "name": "Initial Z",
+            "name": "Initial Z Position",
             "type": "float",
             "default": 0
           },
@@ -67,17 +67,11 @@
             "default": 1
           }
         ],
-        "versions": [
-          {
-            "id": "461c11e0-244b-4ab8-a420-eaed709cc4a0",
-            "name": "Green",
-            "Color": "#28ca37",
-            "Intensity": 1
-          }
-        ]
+        "versions": []
       }
     ],
     "images": [],
-    "skyboxes": []
+    "skyboxes": [],
+    "scripts": []
   }
 }

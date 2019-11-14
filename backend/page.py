@@ -37,6 +37,7 @@ class Page():
                         "skybox_id": None,
                         "Length": 10000
                     },
+                    'scripts': {},
                     'user_settings': {
                         "Initial X Position": 0,
                         "Initial Y Position": 0,

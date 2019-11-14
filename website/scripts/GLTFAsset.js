@@ -39,4 +39,12 @@ class GLTFAsset {
         return false;
     }
 
+    isTerrain() {
+        return false;
+    }
+
+    getObject() {
+        return this._pivotPoint;
+    }
+
 }

@@ -5,16 +5,19 @@ class DataStore {
         this.assets = {};
         this.skyboxes = {};
         this.images = {};
+        this.scripts = {};
         websites = new Websites(this.websites);
         library = new Library(this.library);
         libraryModels = new LibraryModels(this.library.models);
         libraryLights = new LibraryLights(this.library.lights);
         librarySkyboxes = new LibrarySkyboxes(this.library.skyboxes);
         libraryImages = new LibraryImages(this.library.images);
+        libraryScripts = new LibraryScripts(this.library.scripts);
         this._addFromLibrary(this.assets, this.library.models);
         this._addFromLibrary(this.assets, this.library.lights);
         this._addFromLibrary(this.skyboxes, this.library.skyboxes);
         this._addFromLibrary(this.images, this.library.images);
+        this._addFromLibrary(this.scripts, this.library.scripts);
         document.getElementById("nav-save").addEventListener("click", saveWebsiteChanges, false);
     }
 
@@ -30,6 +33,10 @@ class DataStore {
 
     getAssetName(assetId) {
         return this.assets[assetId].name;
+    }
+
+    getScriptFields(scriptId) {
+        return this.scripts[scriptId].fields;
     }
 
     getImageName(imageId) {
@@ -290,6 +297,47 @@ class DataStore {
         librarySkyboxes.deleteSkybox(skybox);
         library.updateNumberOfSkyboxes(this.library.skyboxes.length);
         pageSkybox.setSkybox(pageSkybox._skybox);
+    }
+
+    //Scripts Section
+
+    addScript(script) {
+        this.library.scripts.push(script);
+        this.scripts[script.id] = script;
+        libraryScripts.addScript(script);
+        library.updateNumberOfScripts(this.library.scripts.length);
+        pageScripts.setScripts(pageScripts._pageScripts);
+    }
+
+    renameScript(script) {
+        for (let i = this.library.scripts.length - 1; i >= 0; --i) {
+            if (this.library.scripts[i].id == script.id) {
+                this.library.scripts[i].name = script.name;
+                break;
+            }
+        }
+        libraryScripts.renameScript(script);
+        pageScripts.setScripts(pageScripts._pageScripts);
+    }
+
+    deleteScript(script) {
+        for (let i = this.library.scripts.length - 1; i >= 0; --i) {
+            if (this.library.scripts[i].id == script.id) {
+                this.library.scripts.splice(i,1);
+                break;
+            }
+        }
+        delete this.scripts[script.id];
+        for(let i = 0; i < this.websites.length; i++) {
+            for(let j = 0; j < this.websites[i].pages.length; j++) {
+                delete this.websites[i].pages[j].scripts[script.id];
+            }
+        }
+        replaceAllInObject(this.library, script.id, null);
+        replaceAllInObject(this.websites, script.id, null);
+        libraryScripts.deleteScript(script);
+        library.updateNumberOfScripts(this.library.scripts.length);
+        pageScripts.setScripts(pageScripts._pageScripts);
     }
 
 }

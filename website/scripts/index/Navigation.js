@@ -5,6 +5,7 @@ class Navigation {
         this._addModelToLibrary = this._addModelToLibrary.bind(this);
         this._addImageToLibrary = this._addImageToLibrary.bind(this);
         this._addSkyboxToLibrary = this._addSkyboxToLibrary.bind(this);
+        this._addScriptToLibrary = this._addScriptToLibrary.bind(this);
         this._setupEventListeners();
     }
 
@@ -16,9 +17,11 @@ class Navigation {
         document.getElementById("nav-button-lights").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("nav-button-images").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("nav-button-skyboxes").addEventListener("click", this._navButtonClicked, false);
+        document.getElementById("nav-button-scripts").addEventListener("click", this._navButtonClicked, false);
         document.getElementById("library-upload-model-link").addEventListener("click", this._addModelToLibrary, false);
         document.getElementById("library-upload-image-link").addEventListener("click", this._addImageToLibrary, false);
         document.getElementById("library-upload-skybox-link").addEventListener("click", this._addSkyboxToLibrary, false);
+        document.getElementById("library-upload-script-link").addEventListener("click", this._addScriptToLibrary, false);
     }
 
     _navButtonClicked(e) {
@@ -57,6 +60,9 @@ class Navigation {
         } else if (id == "nav-page-skybox") {
             //$(".subnav.librarynav.display").removeClass("display");
             this._setActiveNavAndShownPage(id);
+        } else if (id == "nav-page-scripts") {
+            //$(".subnav.librarynav.display").removeClass("display");
+            this._setActiveNavAndShownPage(id);
         } else if (id == "nav-page-user-settings") {
             //$(".subnav.librarynav.display").removeClass("display");
             this._setActiveNavAndShownPage(id);
@@ -72,6 +78,8 @@ class Navigation {
         } else if (id == "nav-library-images") {
             this._setActiveNavAndShownPage(id);
         } else if (id == "nav-library-skyboxes") {
+            this._setActiveNavAndShownPage(id);
+        } else if (id == "nav-library-scripts") {
             this._setActiveNavAndShownPage(id);
         }
     }
@@ -137,6 +145,18 @@ class Navigation {
         librarySkybox.setSkybox(skybox);
     }
 
+    _addScriptToLibrary() {
+        $(".page.show").removeClass("show");
+        $("#library-upload-script").addClass("show");
+        libraryUploadScript.clear();
+    }
+
+    goToLibraryScript(script) {
+        $(".page.show").removeClass("show");
+        $("#library-script").addClass("show");
+        libraryScript.setScript(script);
+    }
+
     goToWebsite(websiteDetails) {
         $("#nav-websites").removeClass("active");
         $("#nav-websites").addClass("hide");
@@ -157,6 +177,7 @@ class Navigation {
         pageAssets.setAssets(page.assets);
         pagePlayArea.setPlayArea(page.play_area);
         pageSkybox.setSkybox(page.skybox);
+        pageScripts.setScripts(page.scripts);
         pageUserSettings.setUserSettings(page.user_settings);
     }
 

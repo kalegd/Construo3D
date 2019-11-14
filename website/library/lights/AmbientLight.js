@@ -28,4 +28,8 @@ class AmbientLight {
         return false;
     }
 
+    static getScriptType() {
+        return ScriptType.ASSET;
+    }
+
 }

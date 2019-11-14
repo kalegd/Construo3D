@@ -1,4 +1,4 @@
-class Preview {
+class Release {
     constructor() {
         this._width;
         this._height;
@@ -417,4 +417,4 @@ class Preview {
 
 }
 
-var preview;
+var release;

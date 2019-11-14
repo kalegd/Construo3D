@@ -5,6 +5,7 @@ class Library {
         $('#library-lights-length').html(library.lights.length);
         $('#library-images-length').html(library.images.length);
         $('#library-skyboxes-length').html(library.skyboxes.length);
+        $('#library-scripts-length').html(library.scripts.length);
     }
 
     updateNumberOfModels(newNumber) {
@@ -17,6 +18,10 @@ class Library {
 
     updateNumberOfSkyboxes(newNumber) {
         $('#library-skyboxes-length').html(newNumber);
+    }
+
+    updateNumberOfScripts(newNumber) {
+        $('#library-scripts-length').html(newNumber);
     }
 
 }
