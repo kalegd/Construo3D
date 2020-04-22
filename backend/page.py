@@ -18,20 +18,6 @@ class Page():
                     'name': "Page " + str(len(website_record['pages']) + 1),
                     'id': page_id,
                     'assets': {},
-                    'play_area': {
-                        "Width": 100,
-                        "Length": 100,
-                        "Floor Enabled": False,
-                        "Use Image": False,
-                        "Image": None,
-                        "Image Width": 100,
-                        "Image Length": 100,
-                        "Color": "#40e0d0",
-                        "Use Height Map": False,
-                        "Height Map": None,
-                        "Minimum Height": 0,
-                        "Maximum Height": 100
-                    },
                     'skybox': {
                         "Skybox Enabled": False,
                         "skybox_id": None,
@@ -42,9 +28,7 @@ class Page():
                         "Initial X Position": 0,
                         "Initial Y Position": 0,
                         "Initial Z Position": 0,
-                        "Camera Height": 1.7,
-                        "Movement Speed": 2.5,
-                        "Invert Camera Y Axis Controls": True
+                        "Camera Height": 1.7
                     }
                 }
                 website_record['pages'].append(page_record)

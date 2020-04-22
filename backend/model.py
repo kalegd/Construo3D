@@ -57,8 +57,8 @@ class Model():
             model_type = "GLB"
             model_class = "GLTFAsset"
         model_id = "{uuid}".format(uuid=uuid.uuid4())
-        filename = "library/models/{uuid}{ext}".format(uuid=model_id, ext=ext)
-        with open('website/' + filename, 'wb') as target:
+        filename = "/library/models/{uuid}{ext}".format(uuid=model_id, ext=ext)
+        with open('frontend/' + filename, 'wb') as target:
             buf = model.file.read(1048576) # 1 Megabyte
             while buf:
                 target.write(buf)
@@ -89,7 +89,7 @@ class Model():
     def on_delete(self, req, resp):
         model_id = req.media['id']
         filename = req.media['filename']
-        path = "website/"
+        path = "frontend/"
         if(os.path.exists(path + filename)):
             os.remove(path + filename);
         data_store = None

@@ -16,8 +16,8 @@ class Script:
         script_type = 'JS'
         script_class = req.get_param('class')
         script_id = '{uuid}'.format(uuid=(uuid.uuid4()))
-        filename = 'library/scripts/{uuid}{ext}'.format(uuid=script_id, ext=ext)
-        with open('website/' + filename, 'wb') as (target):
+        filename = '/library/scripts/{uuid}{ext}'.format(uuid=script_id, ext=ext)
+        with open('frontend/' + filename, 'wb') as (target):
             buf = script.file.read(1048576)
             while buf:
                 target.write(buf)
@@ -41,7 +41,7 @@ class Script:
     def on_delete(self, req, resp):
         script_id = req.media['id']
         filename = req.media['filename']
-        path = 'website/'
+        path = 'frontend/'
         if os.path.exists(path + filename):
             os.remove(path + filename)
         data_store = None

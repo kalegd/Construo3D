@@ -25,13 +25,13 @@ class Skybox():
             { 'name': 'top', 'file': top },
             { 'name': 'bottom', 'file': bottom }
         ]
-        path = 'website/'
+        path = 'frontend/'
         skybox_id = "{uuid}".format(uuid=uuid.uuid4())
         os.makedirs(path + "library/skyboxes/" + skybox_id)
         skybox_record = { 'name': name, 'id': skybox_id }
         for skybox_file in files:
             _, ext = os.path.splitext(skybox_file['file'].filename)
-            filename = 'library/skyboxes/' + skybox_id + '/' + skybox_file['name'] + ext
+            filename = '/library/skyboxes/' + skybox_id + '/' + skybox_file['name'] + ext
             with open(path + filename, 'wb') as target:
                 buf = skybox_file['file'].file.read(1048576) # 1 Megabyte
                 while buf:
@@ -88,7 +88,7 @@ class Skybox():
     def on_delete(self, req, resp):
         skybox_id = req.media['id']
         filenames = [req.media['front'], req.media['back'], req.media['left'], req.media['right'], req.media['top'], req.media['bottom']]
-        path = "website/"
+        path = "frontend/"
         for filename in filenames:
             if(os.path.exists(path + filename)):
                 os.remove(path + filename);

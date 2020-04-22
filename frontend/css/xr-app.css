@@ -1,0 +1,70 @@
+body {
+    background-color: #FFFFFF;
+    overflow: hidden;
+    margin: 0px;
+    text-align:center;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#start, #loading.loading {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    color: #FFF;
+    font-size: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+#start .controls {
+    display: inline-table;
+    font-size: 24px;
+    color: #FFF;
+}
+
+#start .control-key {
+    display: inline-block;
+    width: 40px;
+}
+
+#start .control-key span {
+    border-style: solid;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    display: table-cell;
+    text-align: center;
+}
+
+#start .control-row {
+    height: 60px;
+}
+
+#start .control-divide {
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+#start.removed, #start.loading, #loading, #mobile-start-button.removed {
+    display: none;
+}
+
+#mobile-start-button {
+    margin-top: 50px;
+    padding: 12px;
+    display: inline-block;
+    font-size: 4vw;
+    border-style: solid;
+    border-radius: 10px;
+}

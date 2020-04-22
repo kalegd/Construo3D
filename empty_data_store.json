@@ -3,73 +3,7 @@
   "library": {
     "groups": [],
     "models": [],
-    "lights": [
-      {
-        "name": "Point Light",
-        "id": "650654cd-27d7-4285-9f2b-29032524d6c8",
-        "type": "JS",
-        "filename": "library/lights/PointLight.js",
-        "class": "PointLight",
-        "fields": [
-          {
-            "name": "Initial X Position",
-            "type": "float",
-            "default": 0
-          },
-          {
-            "name": "Initial Y Position",
-            "type": "float",
-            "default": 0
-          },
-          {
-            "name": "Initial Z Position",
-            "type": "float",
-            "default": 0
-          },
-          {
-            "name": "Color",
-            "type": "color",
-            "default": "#ffffff"
-          },
-          {
-            "name": "Intensity",
-            "type": "float",
-            "default": 1
-          },
-          {
-            "name": "Distance",
-            "type": "float",
-            "default": 0
-          },
-          {
-            "name": "Decay",
-            "type": "float",
-            "default": 1
-          }
-        ],
-        "versions": []
-      },
-      {
-        "name": "Ambient Light",
-        "id": "c83fd1cf-b2df-48a6-bb47-b7b3cc1e8581",
-        "type": "JS",
-        "filename": "library/lights/AmbientLight.js",
-        "class": "AmbientLight",
-        "fields": [
-          {
-            "name": "Color",
-            "type": "color",
-            "default": "#ffffff"
-          },
-          {
-            "name": "Intensity",
-            "type": "float",
-            "default": 1
-          }
-        ],
-        "versions": []
-      }
-    ],
+    "audios": [],
     "images": [],
     "skyboxes": [],
     "scripts": []
